@@ -20,10 +20,10 @@ export default function Hero() {
             {company.responsePromise}
           </p>
 
-          <h1 className="mt-6 text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl">
-            Vakkundig dakwerk dat
-            <span className="text-brand-300"> jaren meegaat</span>
-          </h1>
+<h1 className="mt-6 text-4xl font-black leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+  Vakkundig dakwerk dat
+  <span className="text-brand-300"> jaren meegaat</span>
+</h1>
           <p className="mt-5 max-w-xl text-lg text-white/85">
             Reparatie, renovatie, isolatie en onderhoud van platte en hellende daken — door een
             gecertificeerde dakdekker met meer dan 25 jaar ervaring. Altijd een gratis dakinspectie
