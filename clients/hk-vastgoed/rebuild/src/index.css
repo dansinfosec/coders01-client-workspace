@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-ink antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-bold tracking-tight text-ink;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
+           transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-500;
+  }
+  .btn-secondary {
+    @apply btn border border-brand-600 bg-white text-brand-700 hover:bg-brand-50 focus-visible:ring-brand-500;
+  }
+  .btn-ghost {
+    @apply btn bg-white/10 text-white hover:bg-white/20 focus-visible:ring-white;
+  }
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-wider text-brand-600;
+  }
+  .prose-block p {
+    @apply mb-4 leading-relaxed text-ink-muted;
+  }
+  .prose-block h2 {
+    @apply mb-3 mt-8 text-2xl;
+  }
+  .prose-block ul {
+    @apply mb-4 list-disc space-y-1 pl-5 text-ink-muted;
+  }
+}
