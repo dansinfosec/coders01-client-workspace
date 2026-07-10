@@ -52,13 +52,13 @@ export default function BackgroundVideo({ poster, alt = '' }) {
       />
 
       {showVideo && (
-        <iframe
-          title="HK Vastgoed & Onderhoud dakwerk"
-          src={videoUrl}
-          allow="autoplay; encrypted-media"
-          tabIndex={-1}
-          className="pointer-events-none absolute left-1/2 top-1/2 z-10 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 border-0"
-        />
+  <iframe
+  title="HK Vastgoed & Onderhoud dakwerk"
+  src="https://www.youtube.com/embed/pdMCfQUGtiQ?controls=1"
+  allow="autoplay; encrypted-media; fullscreen"
+  allowFullScreen
+  className="absolute inset-0 z-10 h-full w-full border-0"
+/>
       )}
 
       <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/85 via-black/60 to-black/35" />
