@@ -11,8 +11,8 @@ export default function FormField({
 }) {
   const id = `field-${name}`
   const base =
-    'w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-ink shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-200'
-  const border = error ? 'border-red-400' : 'border-slate-300'
+    'w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-ink shadow-sm transition-colors placeholder:text-ink-muted focus:border-brand-500 focus:ring-2 focus:ring-brand-200'
+  const border = error ? 'border-red-400' : 'border-sand-200'
 
   return (
     <div>

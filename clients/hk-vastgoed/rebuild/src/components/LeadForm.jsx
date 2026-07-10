@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import FormField from './FormField.jsx'
+import WhatsAppButton from './WhatsAppButton.jsx'
 import { services } from '../data/services.js'
+import { company } from '../data/company.js'
 
 // -----------------------------------------------------------------------------
 // FRONTEND-ONLY lead form (contact + quotation share this component).
@@ -117,14 +119,25 @@ export default function LeadForm({ variant = 'contact' }) {
         }
       />
 
-      <button type="submit" className="btn-primary w-full sm:w-auto">
+      <button type="submit" className="btn-primary w-full text-base sm:w-auto">
         {requireService ? 'Offerte aanvragen' : 'Verstuur bericht'}
       </button>
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-ink-muted">
         Door te versturen gaat u akkoord met ons{' '}
         <Link to="/privacybeleid" className="underline hover:text-brand-700">privacybeleid</Link>. Uw
         gegevens worden uitsluitend gebruikt om uw aanvraag te behandelen.
       </p>
+
+      {/* Direct-contact alternatives to the form. */}
+      <div className="flex flex-col gap-3 border-t border-sand-200 pt-4 sm:flex-row sm:items-center">
+        <span className="text-sm text-ink-muted">Liever direct contact?</span>
+        <div className="flex flex-wrap gap-2">
+          <a href={company.phone.href} className="btn-secondary">
+            Bel {company.phone.display}
+          </a>
+          <WhatsAppButton />
+        </div>
+      </div>
     </form>
   )
 }

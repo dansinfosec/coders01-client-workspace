@@ -6,18 +6,18 @@ import { services } from '../data/services.js'
 export default function Footer() {
   const year = new Date().getFullYear()
   return (
-    <footer className="bg-ink text-slate-300">
+    <footer className="bg-charcoal-950 text-white/70">
       <div className="container-content grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo invert />
-          <p className="mt-4 max-w-xs text-sm text-slate-400">
+          <p className="mt-4 max-w-xs text-sm text-white/55">
             {company.experienceLabel}. Uw dak in vertrouwde handen — van inspectie tot oplevering.
           </p>
           <ul className="mt-4 flex flex-wrap gap-2">
             {company.certifications.map((c) => (
               <li
                 key={c}
-                className="rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-slate-300"
+                className="rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-white/70"
               >
                 {c}
               </li>
@@ -81,8 +81,8 @@ export default function Footer() {
               </li>
             )}
             {company.locations.map((loc) => (
-              <li key={loc.city} className="text-slate-400">
-                <span className="block font-medium text-slate-300">{loc.label}</span>
+              <li key={loc.city} className="text-white/55">
+                <span className="block font-medium text-white/70">{loc.label}</span>
                 {loc.street}, {loc.postcode} {loc.city}
               </li>
             ))}
@@ -91,7 +91,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-content flex flex-col items-center justify-between gap-2 py-6 text-xs text-slate-500 sm:flex-row">
+        <div className="container-content flex flex-col items-center justify-between gap-2 py-6 text-xs text-white/45 sm:flex-row">
           <p>© {year} {company.name}. Alle rechten voorbehouden.</p>
           <p>KvK-nummer volgt · Website — MVP-demo</p>
         </div>

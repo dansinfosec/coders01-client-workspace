@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation, Outlet } from 'react-router-dom'
 import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
+import StickyBar from './StickyBar.jsx'
 
 // Scrolls to top on every route change so new pages start at the top.
 function ScrollToTop() {
@@ -27,6 +28,9 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      {/* Spacer so the mobile sticky bar never covers footer content. */}
+      <div className="h-16 md:hidden" aria-hidden="true" />
+      <StickyBar />
     </div>
   )
 }

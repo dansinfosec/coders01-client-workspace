@@ -12,7 +12,7 @@ export default function Diensten() {
         description="Bekijk alle diensten van HK Vastgoed & Onderhoud: dakreparatie, renovatie, isolatie, platte daken, daklekkage, stormschade, dakramen, dakkapellen en meer."
       />
 
-      <section className="border-b border-slate-100 bg-brand-50/60">
+      <section className="border-b border-sand-200 bg-brand-50/60">
         <div className="container-content py-14 sm:py-16">
           <p className="eyebrow mb-2">Onze diensten</p>
           <h1 className="text-4xl font-extrabold sm:text-5xl">Vakwerk voor elk type dak</h1>

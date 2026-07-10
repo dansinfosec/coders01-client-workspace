@@ -1,8 +1,10 @@
 // SERVICES — 12 diensten from the client's site. `intro` values are VERIFIED
 // (the site's own meta/service descriptions, lightly polished). Where the
-// crawled page had substantial body copy, richer `sections` are included; other
-// services keep a concise, factual summary. Add more sections from scraped/ as
-// pages are fleshed out — nothing here is invented.
+// crawled page had substantial body copy, richer `sections` are included.
+//
+// `whenNeeded` lists general, factual signals for each service (domain
+// information, not client-specific claims). No certifications, guarantees,
+// prices, review scores or project numbers are invented anywhere.
 
 export const services = [
   {
@@ -13,6 +15,11 @@ export const services = [
       'Heeft u last van een daklekkage? Wij sporen de oorzaak snel op en zorgen voor een duurzame oplossing om vervolgschade te voorkomen.',
     image: '/images/service-daklekkage.jpg',
     featured: true,
+    whenNeeded: [
+      'Vochtplekken op het plafond of scheuren in het stucwerk',
+      'Water dat naar binnen komt na regen of storm',
+      'Muffe lucht, schimmel of loslatend behang',
+    ],
     sections: [
       {
         heading: 'Wat doen wij bij een lekkage?',
@@ -38,6 +45,11 @@ export const services = [
       'Is uw platte of hellende dak aan vernieuwing toe? Kies voor een professionele dakrenovatie met oog voor isolatie, veiligheid en een lange levensduur.',
     image: '/images/service-dak-renovatie.jpg',
     featured: true,
+    whenNeeded: [
+      'Terugkerende lekkages of reparaties die zich opstapelen',
+      'Een dak dat ouder is dan 20 jaar',
+      'Zichtbare slijtage, scheuren of vochtdoorslag',
+    ],
     sections: [
       {
         heading: 'Wat is een dakrenovatie precies?',
@@ -62,6 +74,11 @@ export const services = [
       'Wij specialiseren ons in de aanleg, renovatie en reparatie van platte daken. Duurzaam, waterdicht en professioneel afgewerkt.',
     image: '/images/service-platte-daken.jpg',
     featured: true,
+    whenNeeded: [
+      'Stilstaand water, blaren of barsten in de dakbedekking',
+      'Een plat dak op een uitbouw, garage, schuur of woning',
+      'Verouderde bitumen die uitdroogt of verkleurt',
+    ],
     sections: [
       {
         heading: 'Soorten platte daken en materialen',
@@ -86,6 +103,11 @@ export const services = [
       'Van kleine scheuren tot grotere schade: wij zorgen voor een snelle en vakkundige dakreparatie, zodat uw dak weer jaren meegaat.',
     image: '/images/service-dak-reparatie.jpg',
     featured: true,
+    whenNeeded: [
+      'Losliggende of gebroken dakpannen',
+      'Kleine scheuren of beschadigingen in de dakbedekking',
+      'Beginnende lekkage op een afgebakende plek',
+    ],
   },
   {
     slug: 'bitumen-dak',
@@ -95,6 +117,11 @@ export const services = [
       'Overweegt u een bitumen dak? Lees meer over de voordelen, levensduur en toepassingen van bitumen dakbedekking bij renovatie of nieuwbouw.',
     image: '/images/service-bitumen-dak.jpg',
     featured: true,
+    whenNeeded: [
+      'Nieuwe dakbedekking voor een plat dak',
+      'Een voordelige, waterdichte oplossing gewenst',
+      'Vervanging van een verouderde bitumenlaag',
+    ],
   },
   {
     slug: 'dak-isoleren',
@@ -104,6 +131,11 @@ export const services = [
       'Wilt u uw woning energiezuiniger maken? Ontdek de mogelijkheden voor dakisolatie en verlaag uw energiekosten aanzienlijk.',
     image: '/images/service-dak-isoleren.jpg',
     featured: true,
+    whenNeeded: [
+      'Een oudere woning die veel warmte verliest via het dak',
+      'Hoge energiekosten of een koude zolder',
+      'Combineren van isolatie met een renovatie of nieuwe bedekking',
+    ],
   },
   {
     slug: 'dakkapel-renovatie',
@@ -112,6 +144,11 @@ export const services = [
     intro:
       'Is uw dakkapel verouderd of beschadigd? Laat deze renoveren door onze specialisten voor een nette, veilige en goed geïsoleerde afwerking.',
     image: '/images/service-dakkapel-renovatie.jpg',
+    whenNeeded: [
+      'Een verouderde of beschadigde dakkapel',
+      'Tocht, vocht of slechte isolatie rond de dakkapel',
+      'Afwerking die aan vervanging toe is',
+    ],
   },
   {
     slug: 'dakgoot-renovatie',
@@ -120,6 +157,11 @@ export const services = [
     intro:
       'Zijn uw dakgoten aan vervanging toe? Wij renoveren uw dakgoten en zorgen voor een goede waterafvoer en een nette afwerking.',
     image: '/images/service-dakgoot-renovatie.jpg',
+    whenNeeded: [
+      'Overlopende of lekkende dakgoten',
+      'Roest, scheuren of loszittende bevestiging',
+      'Water dat langs de gevel naar beneden loopt',
+    ],
   },
   {
     slug: 'dakraam-plaatsen',
@@ -128,6 +170,11 @@ export const services = [
     intro:
       'Meer licht op zolder? Wij plaatsen dakramen vakkundig en zorgen voor een perfecte aansluiting met uw dakconstructie.',
     image: '/images/service-dakraam-plaatsen.jpg',
+    whenNeeded: [
+      'Een donkere zolder die meer daglicht kan gebruiken',
+      'Een zolder die u als woonruimte wilt inrichten',
+      'Vervanging van een oud, lekkend dakraam',
+    ],
   },
   {
     slug: 'nokvorst-renovatie',
@@ -136,6 +183,11 @@ export const services = [
     intro:
       'Losliggende of beschadigde nokvorsten? Laat ze tijdig renoveren om lekkages en dakschade te voorkomen.',
     image: '/images/service-nokvorst-renovatie.jpg',
+    whenNeeded: [
+      'Losliggende of verschoven nokvorsten',
+      'Afbrokkelend voegwerk op de nok',
+      'Beginnende lekkage langs de daknok',
+    ],
   },
   {
     slug: 'schoorsteen-renovatie',
@@ -144,6 +196,11 @@ export const services = [
     intro:
       'Zit er schade aan uw schoorsteen? Onze experts voeren een grondige renovatie uit voor een veilige en waterdichte afwerking.',
     image: '/images/service-schoorsteen-renovatie.jpg',
+    whenNeeded: [
+      'Afbrokkelend metsel- of voegwerk',
+      'Vochtplekken rond de schoorsteen',
+      'Loodwerk dat loszit of beschadigd is',
+    ],
   },
   {
     slug: 'stormschade',
@@ -153,6 +210,11 @@ export const services = [
       'Stormschade aan uw dak? Wij zijn snel ter plaatse om de schade te beoordelen en direct te herstellen waar nodig.',
     image: '/images/service-stormschade.jpg',
     featured: true,
+    whenNeeded: [
+      'Weggewaaide dakpannen of dakbedekking na storm',
+      'Een gat in het dak of acute lekkage',
+      'Schade die u wilt melden bij de verzekering',
+    ],
   },
 ]
 

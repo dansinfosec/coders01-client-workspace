@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,9 +10,11 @@
   }
   body {
     @apply bg-white text-ink antialiased;
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4 {
-    @apply font-bold tracking-tight text-ink;
+    @apply font-extrabold tracking-tight text-ink;
+    letter-spacing: -0.02em;
   }
   :focus-visible {
     @apply outline-none ring-2 ring-brand-500 ring-offset-2;
@@ -23,29 +25,91 @@
   .container-content {
     @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
   }
+
+  /* Buttons — one accent (brand green) plus neutral/ghost variants. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
-           transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold
+           transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2
+           active:translate-y-px;
   }
   .btn-primary {
-    @apply btn bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-500;
+    @apply btn bg-brand-600 text-white shadow-cta hover:bg-brand-700 hover:shadow-lift focus-visible:ring-brand-500;
   }
   .btn-secondary {
-    @apply btn border border-brand-600 bg-white text-brand-700 hover:bg-brand-50 focus-visible:ring-brand-500;
+    @apply btn border border-brand-600/30 bg-white text-brand-700 hover:border-brand-600 hover:bg-brand-50 focus-visible:ring-brand-500;
   }
   .btn-ghost {
-    @apply btn bg-white/10 text-white hover:bg-white/20 focus-visible:ring-white;
+    @apply btn border border-white/25 bg-white/10 text-white hover:bg-white/20 focus-visible:ring-white;
   }
+  .btn-wa {
+    @apply btn bg-[#25D366] text-white hover:bg-[#1eb257] focus-visible:ring-[#25D366];
+  }
+
   .eyebrow {
-    @apply text-sm font-semibold uppercase tracking-wider text-brand-600;
+    @apply inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-brand-600;
   }
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-6 bg-brand-400;
+  }
+
+  .card {
+    @apply rounded-2xl border border-sand-200/70 bg-white shadow-card transition-all duration-300;
+  }
+
   .prose-block p {
     @apply mb-4 leading-relaxed text-ink-muted;
   }
   .prose-block h2 {
-    @apply mb-3 mt-8 text-2xl;
+    @apply mb-3 mt-8 text-2xl text-ink;
+  }
+  .prose-block h3 {
+    @apply mb-2 mt-6 text-xl text-ink;
   }
   .prose-block ul {
-    @apply mb-4 list-disc space-y-1 pl-5 text-ink-muted;
+    @apply mb-4 space-y-2 pl-0 text-ink-muted;
+  }
+  .prose-block li {
+    @apply relative pl-6;
+  }
+  .prose-block li::before {
+    content: '';
+    @apply absolute left-0 top-2.5 h-2 w-2 rounded-full bg-brand-400;
+  }
+}
+
+@layer utilities {
+  /* Scroll-reveal: elements start hidden, become visible when .is-visible is set
+     by the IntersectionObserver in useReveal(). Staggering via inline delay. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Respect users who prefer reduced motion: no reveal transforms, no smooth
+   scroll, no long transitions. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

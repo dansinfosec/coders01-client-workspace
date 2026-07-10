@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Seo from '../components/Seo.jsx'
 import Hero from '../components/Hero.jsx'
+import TrustStrip from '../components/TrustStrip.jsx'
 import Section, { SectionHeading } from '../components/Section.jsx'
 import ServiceCard from '../components/ServiceCard.jsx'
 import ProcessSteps from '../components/ProcessSteps.jsx'
@@ -9,6 +10,7 @@ import Testimonials from '../components/Testimonials.jsx'
 import Faq from '../components/Faq.jsx'
 import CtaBanner from '../components/CtaBanner.jsx'
 import Button from '../components/Button.jsx'
+import Reveal from '../components/Reveal.jsx'
 import { company, reasons } from '../data/company.js'
 import { featuredServices } from '../data/services.js'
 
@@ -20,30 +22,7 @@ export default function Home() {
         description="HK Vastgoed & Onderhoud: uw betrouwbare dakdekker voor reparatie, renovatie, isolatie en onderhoud van platte en hellende daken. Gratis en vrijblijvende dakinspectie."
       />
       <Hero />
-
-      {/* Trust points strip */}
-      <div className="border-b border-slate-100 bg-white">
-        <div className="container-content grid gap-4 py-8 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            ['Gratis inspectie', 'Vrijblijvend advies op locatie'],
-            ['Binnen 24 uur reactie', 'Snel geholpen, ook bij spoed'],
-            ['Gecertificeerd', 'VCA & Kwaliteitsvakman'],
-            ['3 vestigingen', 'Soest · Haarlem · Amsterdam'],
-          ].map(([title, sub]) => (
-            <div key={title} className="flex items-start gap-3">
-              <span className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 011.4-1.4l3.1 3.1 6.8-6.8a1 1 0 011.1 0z" clipRule="evenodd" />
-                </svg>
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-ink">{title}</p>
-                <p className="text-sm text-ink-muted">{sub}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <TrustStrip />
 
       {/* Main services */}
       <Section>
@@ -53,8 +32,10 @@ export default function Home() {
           intro="Van een acute lekkage tot een complete renovatie — bekijk waar wij u mee kunnen helpen."
         />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredServices.map((s) => (
-            <ServiceCard key={s.slug} service={s} />
+          {featuredServices.map((s, i) => (
+            <Reveal key={s.slug} delay={Math.min(i * 90, 450)}>
+              <ServiceCard service={s} />
+            </Reveal>
           ))}
         </div>
         <div className="mt-10 text-center">
@@ -62,23 +43,34 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* Why choose HK */}
-      <Section tone="muted">
+      {/* Why choose HK — dark trust band */}
+      <Section tone="ink">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div>
             <SectionHeading
-              eyebrow="Waarom HK Vastgoed & Onderhoud"
-              title="Een goed dak is meer dan alleen een afdekking"
-              intro="U hoeft geen verstand van daken te hebben. Wij leggen alles rustig uit, komen onze afspraken na en werken netjes af — ook na afloop."
+              eyebrow="Waarom HK Vastgoedonderhoud?"
+              title="Meer dan 25 jaar een goed dak boven uw hoofd"
+              intro="Wat begon als een klein familiebedrijf is uitgegroeid tot een vertrouwde partner voor particulieren en bedrijven. U hoeft geen verstand van daken te hebben — wij leggen alles rustig uit en komen onze afspraken na."
+              invert
             />
-            <Button to="/over-ons" variant="secondary">Meer over ons</Button>
+            <div className="flex flex-wrap gap-2">
+              {company.certifications.map((c) => (
+                <span key={c} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-sm font-medium text-white">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-brand-300" aria-hidden="true">
+                    <path d="M12 2l7 3v6c0 4.5-3 8.3-7 9-4-.7-7-4.5-7-9V5z" strokeLinejoin="round" />
+                    <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {c}
+                </span>
+              ))}
+            </div>
           </div>
-          <ul className="grid gap-5 sm:grid-cols-2">
-            {reasons.map((r) => (
-              <li key={r.title} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-card">
-                <h3 className="text-base font-bold">{r.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-muted">{r.body}</p>
-              </li>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {reasons.map((r, i) => (
+              <Reveal as="li" key={r.title} delay={i * 80} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <h3 className="text-base font-bold text-white">{r.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">{r.body}</p>
+              </Reveal>
             ))}
           </ul>
         </div>
@@ -91,7 +83,7 @@ export default function Home() {
           title="Onze recente werkzaamheden"
           intro="Een greep uit ons eigen werk — van platte daken en bitumen tot nokvorsten en renovaties."
         />
-        <ProjectGallery limit={6} />
+        <ProjectGallery limit={5} />
         <div className="mt-10 text-center">
           <Button to="/projecten" variant="secondary">Bekijk alle projecten</Button>
         </div>
@@ -111,9 +103,9 @@ export default function Home() {
       {/* Service area */}
       <Section>
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <div className="order-2 overflow-hidden rounded-2xl shadow-card lg:order-1">
+          <Reveal className="order-2 overflow-hidden rounded-2xl shadow-card lg:order-1">
             <img src="/images/about-roof.jpg" alt="Dakdekker aan het werk op locatie" className="h-full w-full object-cover" loading="lazy" />
-          </div>
+          </Reveal>
           <div className="order-1 lg:order-2">
             <SectionHeading
               eyebrow="Werkgebied"

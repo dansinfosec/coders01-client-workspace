@@ -14,7 +14,7 @@ export default function AlgemeneVoorwaarden() {
         description="Algemene voorwaarden van HK Vastgoed & Onderhoud. De volledige, bindende voorwaarden worden op aanvraag verstrekt."
       />
 
-      <section className="border-b border-slate-100 bg-brand-50/60">
+      <section className="border-b border-sand-200 bg-brand-50/60">
         <div className="container-content py-14 sm:py-16">
           <h1 className="text-4xl font-extrabold sm:text-5xl">Algemene voorwaarden</h1>
           <p className="mt-4 max-w-2xl text-ink-muted">
@@ -60,7 +60,7 @@ export default function AlgemeneVoorwaarden() {
             situatie. Kosten worden vooraf helder in kaart gebracht, zonder verborgen posten.
           </p>
 
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-ink-muted">
             Heeft u vragen over onze voorwaarden? Neem gerust{' '}
             <a href={`mailto:${company.email}`} className="text-brand-700 underline">contact</a> met
             ons op.

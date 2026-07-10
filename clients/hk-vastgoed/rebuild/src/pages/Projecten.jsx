@@ -11,7 +11,7 @@ export default function Projecten() {
         description="Bekijk recente projecten van HK Vastgoed & Onderhoud: dakrenovaties, platte daken, bitumen, nokvorsten en meer — uitgevoerd door onze eigen vakmensen."
       />
 
-      <section className="border-b border-slate-100 bg-brand-50/60">
+      <section className="border-b border-sand-200 bg-brand-50/60">
         <div className="container-content py-14 sm:py-16">
           <p className="eyebrow mb-2">Portfolio</p>
           <h1 className="text-4xl font-extrabold sm:text-5xl">Onze recente werkzaamheden</h1>

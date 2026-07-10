@@ -32,7 +32,7 @@ export default function NotFound() {
             <Link
               key={s.slug}
               to={`/diensten/${s.slug}`}
-              className="rounded-full border border-slate-200 px-3 py-1.5 text-sm text-ink-muted hover:border-brand-300 hover:text-brand-700"
+              className="rounded-full border border-sand-200 px-3 py-1.5 text-sm text-ink-muted hover:border-brand-300 hover:text-brand-700"
             >
               {s.title}
             </Link>

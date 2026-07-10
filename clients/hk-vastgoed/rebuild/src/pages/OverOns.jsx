@@ -1,8 +1,10 @@
 import Seo from '../components/Seo.jsx'
 import Section, { SectionHeading } from '../components/Section.jsx'
 import ProcessSteps from '../components/ProcessSteps.jsx'
+import Certifications from '../components/Certifications.jsx'
+import Reveal from '../components/Reveal.jsx'
 import CtaBanner from '../components/CtaBanner.jsx'
-import { company, reasons } from '../data/company.js'
+import { reasons } from '../data/company.js'
 
 export default function OverOns() {
   return (
@@ -55,13 +57,9 @@ export default function OverOns() {
                 altijd weet waar u aan toe bent.
               </p>
             </div>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {company.certifications.map((c) => (
-                <li key={c} className="rounded-full border border-brand-200 bg-white px-4 py-1.5 text-sm font-medium text-brand-700">
-                  {c}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-6">
+              <Certifications />
+            </div>
           </div>
         </div>
       </Section>
@@ -70,11 +68,11 @@ export default function OverOns() {
       <Section>
         <SectionHeading eyebrow="Waarom HK?" title="Waarom klanten voor ons kiezen" center />
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {reasons.map((r) => (
-            <li key={r.title} className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card">
+          {reasons.map((r, i) => (
+            <Reveal as="li" key={r.title} delay={i * 80} className="rounded-2xl border border-sand-200 bg-white p-6 shadow-card">
               <h3 className="text-base font-bold">{r.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-muted">{r.body}</p>
-            </li>
+            </Reveal>
           ))}
         </ul>
       </Section>

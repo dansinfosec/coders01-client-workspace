@@ -4,7 +4,7 @@ import { company } from '../data/company.js'
 export default function ContactDetails() {
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card">
+      <div className="rounded-2xl border border-sand-200 bg-white p-6 shadow-card">
         <h3 className="text-lg font-bold">Direct contact</h3>
         <dl className="mt-4 space-y-3 text-sm">
           <div className="flex items-center gap-3">
@@ -45,7 +45,7 @@ export default function ContactDetails() {
         </dl>
       </div>
 
-      <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card">
+      <div className="rounded-2xl border border-sand-200 bg-white p-6 shadow-card">
         <h3 className="text-lg font-bold">Vestigingen</h3>
         <ul className="mt-4 space-y-4 text-sm">
           {company.locations.map((loc) => (

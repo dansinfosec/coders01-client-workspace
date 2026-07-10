@@ -2,6 +2,7 @@ import Seo from '../components/Seo.jsx'
 import Section from '../components/Section.jsx'
 import LeadForm from '../components/LeadForm.jsx'
 import ContactDetails from '../components/ContactDetails.jsx'
+import FormReassurance from '../components/FormReassurance.jsx'
 import { trustPoints } from '../data/company.js'
 
 export default function Offerte() {
@@ -12,7 +13,7 @@ export default function Offerte() {
         description="Vraag een vrijblijvende offerte aan bij HK Vastgoed & Onderhoud. Beschrijf uw situatie en ontvang een heldere prijsopgave zonder verrassingen achteraf."
       />
 
-      <section className="border-b border-slate-100 bg-brand-50/60">
+      <section className="border-b border-sand-200 bg-brand-50/60">
         <div className="container-content py-14 sm:py-16">
           <p className="eyebrow mb-2">Offerte</p>
           <h1 className="text-4xl font-extrabold sm:text-5xl">Vraag een vrijblijvende offerte aan</h1>
@@ -39,7 +40,8 @@ export default function Offerte() {
               <LeadForm variant="quote" />
             </div>
           </div>
-          <div className="lg:col-span-2">
+          <div className="space-y-6 lg:col-span-2">
+            <FormReassurance />
             <ContactDetails />
           </div>
         </div>

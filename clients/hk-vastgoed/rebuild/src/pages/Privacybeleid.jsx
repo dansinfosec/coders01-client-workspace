@@ -13,7 +13,7 @@ export default function Privacybeleid() {
         description="Privacybeleid van HK Vastgoed & Onderhoud: welke gegevens wij verzamelen, met welk doel, hoe lang we ze bewaren en welke rechten u heeft."
       />
 
-      <section className="border-b border-slate-100 bg-brand-50/60">
+      <section className="border-b border-sand-200 bg-brand-50/60">
         <div className="container-content py-14 sm:py-16">
           <h1 className="text-4xl font-extrabold sm:text-5xl">Privacybeleid</h1>
           <p className="mt-4 max-w-2xl text-ink-muted">
@@ -86,8 +86,8 @@ export default function Privacybeleid() {
             Neem dan contact met ons op via {company.email}.
           </p>
 
-          <hr className="my-8 border-slate-200" />
-          <p className="text-sm text-slate-500">
+          <hr className="my-8 border-sand-200" />
+          <p className="text-sm text-ink-muted">
             Dit privacybeleid is gebaseerd op de bestaande privacyverklaring van {company.name}. De
             definitieve, juridisch bindende versie wordt door de opdrachtgever vastgesteld.
           </p>
