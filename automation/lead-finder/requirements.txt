@@ -1,0 +1,7 @@
+# Core (needed only for REAL API calls / real website audits).
+# All development, tests and the mock demo run without any network stack.
+requests>=2.31,<3
+
+# Optional — screenshots only. Install separately if you want desktop/mobile
+# captures, then run: python -m playwright install chromium
+#   playwright>=1.40

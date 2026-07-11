@@ -1,0 +1,12 @@
+# Secrets — never commit the real key.
+.env
+.env.*
+!.env.example
+
+# Generated run artifacts.
+output/
+
+# Local venv / caches.
+.venv/
+__pycache__/
+*.py[cod]
