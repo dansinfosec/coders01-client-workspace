@@ -37,7 +37,7 @@ export default function ServiceDetail() {
             <span aria-hidden="true">/</span> <span className="text-white">{service.title}</span>
           </nav>
           <div className="max-w-2xl animate-fade-up">
-            <h1 className="text-4xl font-black sm:text-5xl">{service.title}</h1>
+            <h1 className="text-4xl font-black text-white drop-shadow-lg sm:text-5xl">{service.title}</h1>
             <p className="mt-4 max-w-xl text-lg text-white/85">{service.intro}</p>
             {/* 2. Clear CTA buttons */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

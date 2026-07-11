@@ -14,5 +14,8 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/prop-types': 'off',
+    // React 18 only passes fetchpriority through in lowercase (camelCase logs a
+    // DOM warning at runtime), so allow the lowercase form here.
+    'react/no-unknown-property': ['error', { ignore: ['fetchpriority'] }],
   },
 }
