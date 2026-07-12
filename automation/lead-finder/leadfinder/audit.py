@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 from .logging_setup import get_logger
 from .normalize import normalize_domain
 from .form_detect import detect_form
+from .copyright_detect import detect_copyright
 from . import mockdata
 
 LOGGER = get_logger()
@@ -33,7 +34,6 @@ _PHONE_RE = re.compile(r'(tel:|\b0\d[\d\s\-]{7,}\d)', re.I)
 _EMAIL_RE = re.compile(r'mailto:|[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}')
 _CTA_RE = re.compile(r"(offerte|contact|afspraak|inspectie|bel\s|quote|request)", re.I)
 _WA_RE = re.compile(r"(wa\.me/|api\.whatsapp\.com|whatsapp)", re.I)
-_COPYRIGHT_RE = re.compile(r"(?:©|copyright|&copy;)\s*(\d{4})", re.I)
 _SERVICE_LINK_RE = re.compile(r'href=["\'][^"\']*(diensten|services|producten|aanbod)[^"\']*["\']', re.I)
 
 
@@ -147,6 +147,9 @@ def audit_lead(lead: dict, fetcher, current_year: int | None = None,
     form = detect_form(html, base_url=final_url, fetcher=fetcher,
                        rendered_html_provider=rendered_html_provider)
 
+    # Copyright year: take the MOST RECENT year in the copyright statement.
+    cr = detect_copyright(html, current_year=current_year)
+
     audit.update({
         "reachable": True,
         "https": result.get("https"),
@@ -167,7 +170,13 @@ def audit_lead(lead: dict, fetcher, current_year: int | None = None,
         "has_service_pages": bool(_SERVICE_LINK_RE.search(html)),
         "broken_links": result.get("broken_links", 0),
         "broken_images": result.get("broken_images", 0),
-        "copyright_year": _int(_first(_COPYRIGHT_RE.search(html))),
+        # copyright_year holds the EFFECTIVE (most recent) year, so scoring's
+        # `cy < current_year - 1` rule works correctly for ranges.
+        "copyright_year": cr["effective_copyright_year"],
+        "copyright_text": cr["copyright_text"],
+        "copyright_years_found": cr["copyright_years_found"],
+        "effective_copyright_year": cr["effective_copyright_year"],
+        "outdated_copyright": cr["outdated_copyright"],
         "screenshot_desktop": None,
         "screenshot_mobile": None,
     })
@@ -178,10 +187,3 @@ def _first(match):
     if not match:
         return None
     return (match.group(1) if match.groups() else match.group(0)).strip() or None
-
-
-def _int(value):
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
