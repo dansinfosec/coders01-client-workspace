@@ -37,14 +37,25 @@ def map_to_lead(summary: dict, details: dict | None, *, region=None, city=None) 
     }
 
 
+_COUNTRY_TOKENS = {"netherlands", "the netherlands", "nederland"}
+
+
 def _city_from_address(address: str | None) -> str | None:
     """Best-effort city extraction from a Dutch-style formatted address.
 
-    "Zinklaan 22, 3512 BB Utrecht" -> "Utrecht". Falls back to None.
+    "Zinklaan 22, 3512 BB Utrecht, Netherlands" -> "Utrecht". Google's
+    formattedAddress appends the country, so a trailing country token is dropped
+    before reading the city. Falls back to None.
     """
     if not address:
         return None
-    last = address.split(",")[-1].strip()
+    segments = [s.strip() for s in address.split(",") if s.strip()]
+    if not segments:
+        return None
+    # Drop a trailing country name ("..., Netherlands").
+    if segments[-1].lower() in _COUNTRY_TOKENS and len(segments) > 1:
+        segments = segments[:-1]
+    last = segments[-1]
     # Drop a leading Dutch postcode ("3512 BB ") if present.
     parts = last.split()
     if len(parts) >= 3 and parts[0].isdigit() and parts[1].isalpha() and len(parts[1]) == 2:

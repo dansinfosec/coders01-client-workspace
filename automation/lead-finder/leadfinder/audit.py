@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 
 from .logging_setup import get_logger
 from .normalize import normalize_domain
+from .form_detect import detect_form
 from . import mockdata
 
 LOGGER = get_logger()
@@ -30,7 +31,6 @@ _TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
 _DESC_RE = re.compile(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', re.I)
 _PHONE_RE = re.compile(r'(tel:|\b0\d[\d\s\-]{7,}\d)', re.I)
 _EMAIL_RE = re.compile(r'mailto:|[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}')
-_FORM_RE = re.compile(r"<form", re.I)
 _CTA_RE = re.compile(r"(offerte|contact|afspraak|inspectie|bel\s|quote|request)", re.I)
 _WA_RE = re.compile(r"(wa\.me/|api\.whatsapp\.com|whatsapp)", re.I)
 _COPYRIGHT_RE = re.compile(r"(?:©|copyright|&copy;)\s*(\d{4})", re.I)
@@ -108,8 +108,13 @@ class RealFetcher:
 # Audit
 # ---------------------------------------------------------------------------
 
-def audit_lead(lead: dict, fetcher, current_year: int | None = None) -> dict:
-    """Return a structured audit dict for one lead's website."""
+def audit_lead(lead: dict, fetcher, current_year: int | None = None,
+               rendered_html_provider=None) -> dict:
+    """Return a structured audit dict for one lead's website.
+
+    `rendered_html_provider(url) -> html` is an optional callback (e.g. backed by
+    Playwright) used only as a last-resort fallback for JS-rendered forms.
+    """
     if current_year is None:
         current_year = datetime.now(timezone.utc).year
 
@@ -135,20 +140,28 @@ def audit_lead(lead: dict, fetcher, current_year: int | None = None) -> dict:
 
     html = result.get("html", "")
     status = result.get("status_code")
+    final_url = result.get("final_url") or website
+
+    # Robust contact/quotation form detection (embedded/JS/iframe/plugin forms,
+    # and forms on a linked contact/offerte page). Records evidence.
+    form = detect_form(html, base_url=final_url, fetcher=fetcher,
+                       rendered_html_provider=rendered_html_provider)
+
     audit.update({
         "reachable": True,
         "https": result.get("https"),
         "status_code": status,
         "server_error": bool(status and 500 <= status < 600),
         "response_time": result.get("response_time"),
-        "final_url": result.get("final_url"),
+        "final_url": final_url,
         "redirects": result.get("redirects", 0),
         "mobile_viewport": bool(_VIEWPORT_RE.search(html)),
         "title": _first(_TITLE_RE.search(html)),
         "meta_description": _first(_DESC_RE.search(html)),
         "has_visible_phone": bool(_PHONE_RE.search(html)),
         "has_visible_email": bool(_EMAIL_RE.search(html)),
-        "has_contact_form": bool(_FORM_RE.search(html)),
+        "has_contact_form": form["found"],
+        "form_detection": form,
         "has_cta": bool(_CTA_RE.search(html)),
         "has_whatsapp": bool(_WA_RE.search(html)),
         "has_service_pages": bool(_SERVICE_LINK_RE.search(html)),
