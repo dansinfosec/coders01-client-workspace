@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 LEAD_FIELDS = [
-    "place_id", "business_name", "category", "address", "city", "region",
+    "place_id", "industry", "business_name", "category", "address", "city", "region",
     "phone", "website", "google_maps_uri", "business_status", "source_checked_at",
 ]
 
@@ -14,8 +14,13 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def map_to_lead(summary: dict, details: dict | None, *, region=None, city=None) -> dict:
-    """Combine a Text Search summary + optional Place Details into a lead dict."""
+def map_to_lead(summary: dict, details: dict | None, *, region=None, city=None,
+                industry=None) -> dict:
+    """Combine a Text Search summary + optional Place Details into a lead dict.
+
+    `industry` is the branche slug (e.g. "dakdekkers") the search was run for; it
+    lets one dashboard hold multiple industries.
+    """
     d = details or {}
 
     def name(obj):
@@ -24,6 +29,7 @@ def map_to_lead(summary: dict, details: dict | None, *, region=None, city=None) 
 
     return {
         "place_id": d.get("id") or summary.get("id"),
+        "industry": industry,
         "business_name": name(d) or name(summary),
         "category": d.get("primaryType") or summary.get("primaryType"),
         "address": d.get("formattedAddress") or summary.get("formattedAddress"),

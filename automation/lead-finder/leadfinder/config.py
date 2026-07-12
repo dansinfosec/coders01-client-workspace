@@ -83,6 +83,15 @@ class Paths:
         return self.output / "review-state.json"
 
     @property
+    def dashboard_data(self) -> Path:
+        # Combined multi-industry data the master dashboard reads.
+        return self.output / "dashboard-data.json"
+
+    @property
+    def industries_dir(self) -> Path:
+        return self.output / "industries"
+
+    @property
     def screenshots_desktop(self) -> Path:
         return self.output / "screenshots" / "desktop"
 
@@ -97,6 +106,22 @@ class Paths:
 
 def make_paths(output_dir: str | Path | None = None) -> Paths:
     return Paths(output=Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR)
+
+
+def make_industry_paths(industry: str, output_dir: str | Path | None = None) -> Paths:
+    """Paths rooted at output/industries/<industry>/ so industries stay separate."""
+    base = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
+    return Paths(output=base / "industries" / industry)
+
+
+def list_industries(output_dir: str | Path | None = None) -> list[str]:
+    """Slugs of industries that have data (a leads.json) under output/industries/."""
+    base = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
+    idir = base / "industries"
+    if not idir.exists():
+        return []
+    return sorted(p.name for p in idir.iterdir()
+                  if p.is_dir() and (p / "leads.json").exists())
 
 
 @dataclass

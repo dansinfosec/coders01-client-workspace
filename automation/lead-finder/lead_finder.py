@@ -73,12 +73,27 @@ def _regenerate_outputs(paths, leads, audits):
     return scores
 
 
+def _rebuild_master_dashboard(output_dir=None):
+    """Combine every industry folder into dashboard-data.json + the master
+    dashboard.html at the top-level output/ dir."""
+    top = config.make_paths(output_dir)
+    top.output.mkdir(parents=True, exist_ok=True)
+    payload = dash.build_combined_data(top)
+    storage.write_json(top.dashboard_data, payload)
+    top.dashboard_html.write_text(dash.render(payload), encoding="utf-8")
+    LOGGER.info("Master dashboard rebuilt: %d leads across %s",
+                len(payload["rows"]), payload["industries"])
+    return payload
+
+
 # ---------------------------------------------------------------------------
 # Commands
 # ---------------------------------------------------------------------------
 
 def cmd_search(args):
-    paths = config.make_paths(args.output_dir)
+    # Every search/batch targets one industry, stored separately so batches do
+    # not overwrite each other.
+    paths = config.make_industry_paths(args.industry, args.output_dir)
     paths.ensure()
     budget = config.Budget(max_requests=args.budget)
 
@@ -114,7 +129,8 @@ def cmd_search(args):
 
     for summ in summaries:
         details = client.place_details(summ.get("id")) if not args.no_details else None
-        raw_leads.append(map_to_lead(summ, details, region=args.region, city=args.city))
+        raw_leads.append(map_to_lead(summ, details, region=args.region, city=args.city,
+                                     industry=args.industry))
 
     leads, dups = dedupe_leads(raw_leads)
     LOGGER.info("Deduplicated: %d unique leads (%d duplicates removed).", len(leads), dups)
@@ -134,15 +150,16 @@ def cmd_search(args):
         "last_page_token": getattr(client, "last_page_token", None),
     }
     storage.write_run_report(paths, report)
+    _rebuild_master_dashboard(args.output_dir)
     _print_usage(report)
-    print(f"\nSaved {len(leads)} leads → {paths.leads_json}")
+    print(f"\nSaved {len(leads)} leads ({args.industry}) → {paths.leads_json}")
     return 0
 
 
 def cmd_audit(args):
-    paths = config.make_paths(args.output_dir)
+    paths = config.make_industry_paths(args.industry, args.output_dir)
     paths.ensure()
-    leads = storage.load_leads(config.make_paths(args.output_dir)) if not args.input else \
+    leads = storage.load_leads(paths) if not args.input else \
         storage.read_json(Path(args.input), default={}).get("leads", []) or []
     if not leads:
         LOGGER.error("No leads found. Run `search` first (or pass --input).")
@@ -179,10 +196,11 @@ def cmd_audit(args):
         "score_distribution": _distribution(scores),
     })
     storage.write_run_report(paths, report)
+    _rebuild_master_dashboard(args.output_dir)
 
-    print(f"\nAudited {len(audits)} sites → {paths.audits_json}")
+    print(f"\nAudited {len(audits)} sites ({args.industry}) → {paths.audits_json}")
     print(f"Refreshed CSV → {paths.leads_csv}")
-    print(f"Dashboard → {paths.dashboard_html}")
+    print(f"Master dashboard → {config.make_paths(args.output_dir).dashboard_html}")
     return 0
 
 
@@ -213,14 +231,17 @@ def cmd_export(args):
 
 
 def cmd_dashboard(args):
-    paths = config.make_paths(args.output_dir)
-    leads = storage.load_leads(paths)
-    audits = storage.load_audits(paths)
-    if not leads:
-        LOGGER.error("No leads found. Run `search` (and `audit`) first.")
+    """(Re)build the combined multi-industry master dashboard from every
+    output/industries/<slug>/ folder."""
+    industries = config.list_industries(args.output_dir)
+    if not industries:
+        LOGGER.error("No industry data found under output/industries/. Run `search` first.")
         return 2
-    _regenerate_outputs(paths, leads, audits)
-    print(f"Dashboard → {paths.dashboard_html}")
+    payload = _rebuild_master_dashboard(args.output_dir)
+    top = config.make_paths(args.output_dir)
+    print(f"Combined data → {top.dashboard_data}")
+    print(f"Master dashboard → {top.dashboard_html}")
+    print(f"Industries: {payload['industries']} · {len(payload['rows'])} leads")
     return 0
 
 
@@ -268,6 +289,8 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="command", required=True)
 
     s = sub.add_parser("search", help="Find businesses via the Places API.")
+    s.add_argument("--industry", required=True,
+                   help='Branche slug the results belong to, e.g. dakdekkers / thuiszorg / makelaars.')
     s.add_argument("--query", required=True, help='e.g. "dakdekker" or "kapper"')
     s.add_argument("--region", default=None, help="Province/region, e.g. Utrecht.")
     s.add_argument("--city", default=None, help="City, e.g. Amsterdam.")
@@ -283,7 +306,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.set_defaults(func=cmd_search)
 
     a = sub.add_parser("audit", help="Audit lead websites and score them.")
-    a.add_argument("--input", default=None, help="Path to a leads.json (default: output/leads.json).")
+    a.add_argument("--industry", required=True,
+                   help="Branche slug to audit (matches the search --industry).")
+    a.add_argument("--input", default=None, help="Path to a leads.json (default: the industry's leads.json).")
     a.add_argument("--timeout", type=float, default=15.0)
     a.add_argument("--screenshots", action="store_true", help="Capture screenshots (needs Playwright).")
     a.add_argument("--resume", action="store_true", help="Skip already-audited leads.")
