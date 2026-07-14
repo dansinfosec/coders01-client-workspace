@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Roofing Center design tokens.
+  Brand: navy #0D222D · green #45D38E · cream #FEE7AD.
+  HSL channels so Tailwind can apply opacity via hsl(var(--x) / a).
+  Navy = foundation, green = actions/accents, cream = sparse warm highlights.
+*/
+:root {
+  --navy: 201 55% 11%;
+  --navy-900: 201 56% 8%;
+  --navy-800: 201 42% 15%;
+  --navy-700: 201 34% 21%;
+  --navy-600: 201 26% 30%;
+
+  --green: 151 60% 55%;        /* buttons/fills (use with dark text) */
+  --green-strong: 154 64% 27%; /* text/links on light — ~5.6:1 on white */
+  --green-soft: 151 48% 92%;
+
+  --cream: 43 96% 84%;
+  --cream-soft: 43 88% 92%;
+
+  --surface: 0 0% 100%;
+  --surface-muted: 200 22% 96%;
+
+  --text-strong: 201 45% 14%;
+  --text-body: 201 20% 26%;
+  --text-muted: 201 12% 42%;
+  --text-invert: 200 25% 95%;
+
+  --line: 200 20% 88%;
+  --line-invert: 201 30% 24%;
+
+  --focus: 151 60% 42%;
+  --error: 4 70% 50%;
+  --warning: 34 84% 44%;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@layer base {
+  * { border-color: hsl(var(--line)); }
+
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  body {
+    @apply bg-surface text-text-body font-sans antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 { @apply font-bold tracking-tight text-text-strong text-balance; }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--focus));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link { @apply sr-only; }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-green px-4 py-2 font-semibold text-navy shadow-soft;
+  }
+  /* Eyebrow label — cream accent used sparingly */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-green-strong;
+  }
+}

@@ -1,0 +1,6 @@
+# Roofing Center — robots.txt
+User-agent: *
+Allow: /
+
+# Update the host once the production domain is known.
+Sitemap: /sitemap.xml
