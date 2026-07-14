@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { DesktopNavigation } from "@/components/layout/DesktopNavigation";
-import { MobileNavigation } from "@/components/layout/MobileNavigation";
+import { MobileNavigation, MOBILE_MENU_ID } from "@/components/layout/MobileNavigation";
 import { Button } from "@/components/ui/Button";
 import { siteSettings } from "@/data/siteSettings";
 import { imageAssets } from "@/data/imageAssets";
@@ -20,6 +20,15 @@ export function SiteHeader() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  // Close the menu when the layout switches to desktop, so a resize while the
+  // mobile menu is open never leaves the body scroll locked.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = (e: MediaQueryListEvent) => { if (e.matches) setMenuOpen(false); };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-surface/95 backdrop-blur">
@@ -57,6 +66,7 @@ export function SiteHeader() {
             aria-label="Menu openen"
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
+            aria-controls={MOBILE_MENU_ID}
           >
             <Menu className="h-6 w-6" aria-hidden="true" />
           </button>
