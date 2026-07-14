@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  ============================================================================
+  Sem & Co brand tokens — DERIVED FROM THE OFFICIAL LOGO + LIVE THEME CSS
+  (semenco.nl). Values are HSL channels so Tailwind can apply opacity via
+  `hsl(var(--x) / a)`. Full provenance + contrast evidence:
+    - src/data/brand.ts
+    - scraped-data/reports/brand-analysis.md
+  Do not scatter hex values in components — use the semantic tokens below.
+  ============================================================================
+*/
+:root {
+  /* --- Canonical brand palette (verified) --- */
+  --brand-primary: 63 20% 38%; /* #72744e olive — logo "Sem"/tree; live buttons, CTAs, headings. 4.86:1 on white */
+  --brand-primary-hover: 63 22% 30%; /* darkened olive for hover/active — 6.8:1 */
+  --brand-primary-soft: 63 26% 90%; /* pale olive tint for soft fills */
+  --brand-secondary: 30 29% 42%; /* #896b4c warm brown — logo trunk; live header/menu bg */
+  --brand-accent: 186 43% 32%; /* accessible dark teal, derived from live link-hover #82c0c7 (which is 2:1, text-unsafe) */
+  --brand-accent-soft: 34 42% 92%; /* warm soft tint for small labels / icon chips */
+  --brand-dark: 190 35% 14%; /* #172c30 navy — logo "& Co"; live footer & active nav. 14.6:1 */
+  --brand-light: 60 55% 93%; /* #fafae1 cream — live light background */
+
+  /* --- Neutrals --- */
+  --background: 56 36% 98%; /* very light warm cream-white */
+  --surface: 0 0% 100%;
+  --surface-muted: 54 33% 96%;
+  --text-primary: 196 22% 16%; /* navy-derived dark — 13.9:1 on white */
+  --text-secondary: 40 9% 36%; /* warm gray — ~6.3:1 on white, safe on muted fills too */
+  --border: 48 16% 88%;
+  --focus-ring: 63 24% 34%; /* olive, strong-enough ring */
+
+  /* --- Tailwind bridge: existing --color-* names map onto the tokens above,
+         so components keep using semantic classes (bg-brand, text-accent, …). --- */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-brand: var(--brand-primary);
+  --color-brand-soft: var(--brand-primary-soft);
+  --color-brand-strong: var(--brand-primary-hover);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  /* Component "accent" = accessible warm brown (5.9:1) for small warm highlights */
+  --color-accent: 28 30% 36%;
+  --color-accent-soft: var(--brand-accent-soft);
+  --color-border: var(--border);
+  --color-focus: var(--focus-ring);
+  --color-success: 148 42% 34%;
+  --color-warning: 34 70% 38%;
+  --color-error: 5 60% 46%;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--color-border));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible, consistent focus indicator for keyboard users. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--color-focus));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-semibold tracking-tight text-balance;
+  }
+
+  /* Respect users who prefer reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Skip link: hidden until focused. */
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-50 rounded-lg bg-brand px-4 py-2 text-white shadow-soft;
+  }
+}

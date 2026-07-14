@@ -1,0 +1,28 @@
+{
+  "start_url": "https://semenco.nl/ouders",
+  "root_host": "semenco.nl",
+  "generated_at": "2026-07-14T16:34:38.342631+00:00",
+  "page_count": 2,
+  "pages": [
+    {
+      "url": "https://semenco.nl/ouders",
+      "status_code": 200,
+      "title": "Ouders - Sem & Co",
+      "meta_description": null,
+      "canonical_url": "https://semenco.nl/ouders",
+      "filename": "ouders-5b645610d1.html",
+      "content_type": "text/html; charset=UTF-8",
+      "fetched_at": "2026-07-14T16:34:34.963543+00:00"
+    },
+    {
+      "url": "https://semenco.nl/",
+      "status_code": 200,
+      "title": "Kleinschalige logeeropvang met echte aandacht",
+      "meta_description": "Zoek je logeeropvang met persoonlijke aandacht? Wij bieden kleinschalige, warme zorg voor kinderen met een beperking. Bekijk de mogelijkheden",
+      "canonical_url": "https://semenco.nl/",
+      "filename": "index-aa6af3868c.html",
+      "content_type": "text/html; charset=UTF-8",
+      "fetched_at": "2026-07-14T16:34:36.841597+00:00"
+    }
+  ]
+}

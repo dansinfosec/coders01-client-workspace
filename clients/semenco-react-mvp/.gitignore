@@ -1,0 +1,26 @@
+# Dependencies & build output
+node_modules/
+dist/
+.vite/
+
+# Secrets & local environment — never commit
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+*.log
+
+# Scraped raw output can be large — keep the folder structure (.gitkeep) but
+# ignore bulk generated content until it has been reviewed.
+scraped-data/pages/
+scraped-data/assets/
+# Curated app images under public/images/semenco/ ARE tracked (they are part of
+# the site) — only the raw scraped-data/ bulk above is ignored.
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

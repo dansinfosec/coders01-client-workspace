@@ -1,0 +1,28 @@
+{
+  "start_url": "https://semenco.nl/ouders",
+  "root_host": "semenco.nl",
+  "started_at": "2026-07-14T16:34:33.822574+00:00",
+  "finished_at": "2026-07-14T16:34:38.342631+00:00",
+  "max_pages": 2,
+  "delay_seconds": 1.5,
+  "include_subdomains": false,
+  "successful": [
+    {
+      "url": "https://semenco.nl/ouders",
+      "status_code": 200,
+      "filename": "ouders-5b645610d1.html"
+    },
+    {
+      "url": "https://semenco.nl/",
+      "status_code": 200,
+      "filename": "index-aa6af3868c.html"
+    }
+  ],
+  "skipped": [
+    {
+      "url": "https://www.instagram.com/logeerhuissem",
+      "reason": "off_domain"
+    }
+  ],
+  "errors": []
+}
