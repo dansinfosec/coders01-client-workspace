@@ -1,0 +1,45 @@
+{
+  "site": "https://www.all-indaktechniek.nl/",
+  "client": "all-in-daktechniek",
+  "crawledAt": "2026-07-21",
+  "method": "Claude Browser (same-origin fetch) — inspection only, no changes to live site",
+  "platform": "WordPress + WPBakery + Yoast SEO + jQuery",
+  "company": {
+    "name": "All-in Daktechniek",
+    "contact": "Borre Van der Wal",
+    "address": "Stationsweg 53, 2675 AM Honselersdijk",
+    "phone": ["06 53252125", "06 42059084"],
+    "whatsapp": "https://wa.me/0653252125",
+    "email": "info@all-indaktechniek.nl",
+    "kvk": "73998400",
+    "facebook": "https://www.facebook.com/All.in.Daktechniek/"
+  },
+  "pages": [
+    { "path": "/", "file": "pages/home.html", "title": "All-in Daktechniek - De Dakdekker met ervaring. ☎ nummer.", "metaDescription": null },
+    { "path": "/platte-daken/", "file": "pages/platte-daken.html", "title": "All-In Daktechniek - Platte Daken", "metaDescription": null },
+    { "path": "/pannendaken/", "file": "pages/pannendaken.html", "title": "Pannendaken - All-in Daktechniek", "metaDescription": null },
+    { "path": "/lood-en-zinkwerk/", "file": "pages/lood-en-zinkwerk.html", "title": "Lood en zinkwerk - All-in Daktechniek", "metaDescription": null },
+    { "path": "/schoorstenen/", "file": "pages/schoorstenen.html", "title": "Schoorstenen - All-in Daktechniek", "metaDescription": null },
+    { "path": "/dakisolatie/", "file": "pages/dakisolatie.html", "title": "Dakisolatie - All-in Daktechniek", "metaDescription": null },
+    { "path": "/epdm/", "file": "pages/epdm.html", "title": "EPDM - All-in Daktechniek", "metaDescription": null },
+    { "path": "/inspectie-en-dak-onderhoud/", "file": "pages/inspectie-en-dak-onderhoud.html", "title": "Inspectie en dak onderhoud - All-in Daktechniek", "metaDescription": null },
+    { "path": "/projecten/", "file": "pages/projecten.html", "title": "Archief projecten - All-in Daktechniek", "metaDescription": null },
+    { "path": "/contact/", "file": "pages/contact.html", "title": "Contact met All-In Daktechniek", "metaDescription": null },
+    { "path": "/offerte-formulier/", "file": "pages/offerte-formulier.html", "title": "Offerte aanvragen - All-in Daktechniek", "metaDescription": null }
+  ],
+  "services": ["platte daken", "pannendaken", "lood en zinkwerk", "schoorstenen", "dakisolatie", "epdm", "inspectie en dak onderhoud", "renovatie (genoemd, geen pagina)", "service onderhoud (genoemd, geen pagina)"],
+  "seo": {
+    "metaDescriptions": "afwezig op alle pagina's",
+    "structuredData": "Yoast WebPage/WebSite; geen LocalBusiness",
+    "sitemap": "https://www.all-indaktechniek.nl/sitemap_index.xml",
+    "robots": "alles toegestaan",
+    "analytics": "gtag aanwezig zonder cookiebanner",
+    "titlePlaceholder": "homepage-title bevat placeholder '☎ nummer.'"
+  },
+  "flags": [
+    "Tegenstrijdige garantie-claims: 12 (home) / 15 (pannendaken) / 10 (zinkwerk) jaar",
+    "Tegenstrijdige ervaring: 'gemiddeld 20 jaar' (home) vs 'Ruim 15 jaar' (footer)",
+    "Copyright-jaar inconsistent: 2018/2020/2021",
+    "'Frisse Zonwering' verwijzing in footer/menu — relatie onbekend"
+  ]
+}
