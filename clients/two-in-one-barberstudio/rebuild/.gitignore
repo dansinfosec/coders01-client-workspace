@@ -1,0 +1,25 @@
+# Dependencies & build output
+node_modules/
+dist/
+.vite/
+
+# Secrets & local env — never commit
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Google Maps preview photos: track ONLY the optimized WebP used by the frontend.
+# Everything else in this folder (raw drops, etc.) stays ignored. These WebP are
+# TEMPORARY previews and must be replaced with owner-provided originals before production.
+public/images/google-preview/*
+!public/images/google-preview/*.webp

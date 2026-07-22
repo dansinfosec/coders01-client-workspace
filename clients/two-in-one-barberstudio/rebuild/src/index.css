@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Two in one barberstudio design tokens.
+
+  MEASURED from the Setmore logo artwork (sampled pixels):
+    --ink   black      #000000
+    --cream warm cream #EEE2C2   (the "2&1" wordmark + tools)
+    --red   deep red   #A31E1F   (logo text + accents)
+
+  ADDED for accessibility / UI (supporting neutrals, NOT from the source):
+    charcoal surface ramp (#0A0A0A…#2A2A2A), warm off-white text, muted grays,
+    a brighter red for hover, a hairline border color.
+
+  HSL channels so Tailwind can apply opacity via hsl(var(--x) / a).
+*/
+:root {
+  --ink: 0 0% 0%;            /* measured #000000 */
+  --ink-900: 0 0% 4%;        /* added: page base */
+  --ink-800: 0 0% 8%;        /* added: cards */
+  --ink-700: 0 0% 12%;       /* added */
+  --ink-600: 0 0% 17%;       /* added */
+
+  --cream: 44 56% 85%;       /* measured #EEE2C2 */
+  --cream-strong: 44 62% 90%;/* added: headings */
+  --cream-soft: 44 40% 78%;  /* added */
+
+  --red: 0 69% 38%;          /* measured #A31E1F */
+  --red-bright: 0 66% 47%;   /* added: hover */
+
+  --surface: 0 0% 4%;        /* added */
+  --surface-muted: 0 0% 8%;  /* added */
+
+  --text-strong: 40 30% 96%; /* added: warm off-white */
+  --text-body: 40 12% 82%;   /* added */
+  --text-muted: 40 8% 62%;   /* added */
+  --text-invert: 0 0% 4%;    /* added: text on cream */
+
+  --line: 40 8% 20%;         /* added: hairline */
+  --focus: 44 56% 70%;       /* added: cream focus ring */
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@layer base {
+  * { border-color: hsl(var(--line)); }
+
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+
+  body {
+    @apply bg-surface text-text-body font-sans antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 { @apply font-serif font-bold tracking-tight text-text-strong text-balance; }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--focus));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link { @apply sr-only; }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-cream px-4 py-2 font-semibold text-ink shadow-soft;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-cream;
+  }
+  /* Barber-pole hairline accent */
+  .barber-rule {
+    height: 3px;
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--red)) 0 8px,
+      hsl(var(--cream)) 8px 16px
+    );
+  }
+}

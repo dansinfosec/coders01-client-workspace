@@ -1,0 +1,6 @@
+# Raw/original downloads: banner + logo screenshots, raw Google photos,
+# contact sheet. Temporary source references — never commit.
+assets/
+
+# Google Places API responses (raw data + photo references) — not for commit.
+docs/*.json
