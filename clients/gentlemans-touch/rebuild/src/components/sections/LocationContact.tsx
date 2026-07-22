@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Navigation } from "lucide-react";
+import { MapPin, Phone, Navigation } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { business, fullAddress, directionsUrl } from "@/data/business";
@@ -23,15 +23,6 @@ export function LocationContact() {
                 <p className="font-semibold text-text-strong">Telefoon</p>
                 <a href={business.phone.href} className="text-text-body hover:text-cream">
                   {business.phone.display}
-                </a>
-              </div>
-            </li>
-            <li className="flex items-start gap-3">
-              <Mail className="mt-0.5 h-5 w-5 shrink-0 text-cream" aria-hidden="true" />
-              <div>
-                <p className="font-semibold text-text-strong">E-mail</p>
-                <a href={`mailto:${business.email}`} className="break-all text-text-body hover:text-cream">
-                  {business.email}
                 </a>
               </div>
             </li>

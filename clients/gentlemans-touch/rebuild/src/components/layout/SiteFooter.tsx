@@ -1,7 +1,7 @@
-import { MapPin, Phone, Mail, CalendarCheck } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/layout/Logo";
-import { business, fullAddress } from "@/data/business";
+import { business, fullAddress, BOOK_LABEL } from "@/data/business";
 
 const hm = (mins: number) =>
   `${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}`;
@@ -19,12 +19,10 @@ export function SiteFooter() {
               Premium barbershop in {business.city}. Verzorgd herenknippen, fades en baardverzorging.
             </p>
             <a
-              href={business.booking.base}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={business.phone.href}
               className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg bg-cream px-4 font-semibold text-ink transition-colors hover:bg-cream-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
-              <CalendarCheck className="h-5 w-5" aria-hidden="true" /> Boek afspraak
+              <Phone className="h-5 w-5" aria-hidden="true" /> {BOOK_LABEL}
             </a>
           </div>
 
@@ -40,10 +38,6 @@ export function SiteFooter() {
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0 text-cream" aria-hidden="true" />
                 <a href={business.phone.href} className="hover:text-cream">{business.phone.display}</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-cream" aria-hidden="true" />
-                <a href={`mailto:${business.email}`} className="break-all hover:text-cream">{business.email}</a>
               </li>
             </ul>
           </div>

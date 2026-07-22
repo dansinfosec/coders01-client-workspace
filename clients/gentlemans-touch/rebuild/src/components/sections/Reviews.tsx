@@ -31,23 +31,34 @@ export function Reviews() {
           </Button>
         </div>
 
-        {/* Real review text */}
+        {/* Testimonials */}
         <div>
           <SectionHeading eyebrow="Reviews" title="Wat klanten zeggen" />
-          <ul className="mt-8 space-y-4">
-            {reviews.map((r) => (
-              <li key={r.author} className="rounded-2xl border border-line bg-ink p-6 shadow-soft">
-                <Quote className="h-6 w-6 text-red" aria-hidden="true" />
-                <p className="mt-3 text-lg text-text-strong">{r.text}</p>
-                <p className="mt-4 text-sm text-text-muted">
-                  — {r.author}, {r.timeAgo}
-                </p>
-              </li>
-            ))}
-          </ul>
+          {reviews.length > 0 ? (
+            <ul className="mt-8 space-y-4">
+              {reviews.map((r) => (
+                <li key={r.author} className="rounded-2xl border border-line bg-ink p-6 shadow-soft">
+                  <Quote className="h-6 w-6 text-red" aria-hidden="true" />
+                  <p className="mt-3 text-lg text-text-strong">{r.text}</p>
+                  <p className="mt-4 text-sm text-text-muted">
+                    — {r.author}, {r.timeAgo}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mt-8 rounded-2xl border border-line bg-ink p-6 shadow-soft">
+              <Quote className="h-6 w-6 text-red" aria-hidden="true" />
+              <p className="mt-3 text-lg text-text-strong">
+                Onze klanten waarderen ons met een {business.rating.toFixed(1)} op Google.
+              </p>
+              <p className="mt-2 text-text-body">
+                Lees de ervaringen van {business.reviewCount} bezoekers rechtstreeks op Google.
+              </p>
+            </div>
+          )}
           <p className="mt-4 text-xs text-text-muted">
-            Beoordeling en aantal reviews via Google Maps. Reviewtekst afkomstig van de openbare
-            online agenda. Er worden geen reviews verzonnen.
+            Beoordeling en aantal reviews via Google Maps. Er worden geen reviews verzonnen.
           </p>
         </div>
       </div>

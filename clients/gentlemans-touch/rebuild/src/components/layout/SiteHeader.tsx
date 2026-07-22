@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Menu, CalendarCheck } from "lucide-react";
+import { Menu, Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/layout/Logo";
 import { MobileNav, MOBILE_MENU_ID } from "@/components/layout/MobileNav";
 import { navItems } from "@/data/nav";
-import { business } from "@/data/business";
+import { business, BOOK_LABEL } from "@/data/business";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,14 +43,8 @@ export function SiteHeader() {
           </ul>
         </nav>
         <div className="flex items-center gap-2">
-          <Button
-            href={business.booking.base}
-            target="_blank"
-            rel="noopener noreferrer"
-            size="sm"
-            className="hidden sm:inline-flex"
-          >
-            <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Boek afspraak
+          <Button href={business.phone.href} size="sm" className="hidden sm:inline-flex">
+            <Phone className="h-4 w-4" aria-hidden="true" /> {BOOK_LABEL}
           </Button>
           <button
             ref={triggerRef}

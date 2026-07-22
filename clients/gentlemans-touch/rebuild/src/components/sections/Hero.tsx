@@ -1,7 +1,7 @@
-import { CalendarCheck, Phone, Star, MapPin } from "lucide-react";
+import { Phone, Star, MapPin, Navigation } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { business } from "@/data/business";
+import { business, BOOK_LABEL, directionsUrl } from "@/data/business";
 import { heroImage } from "@/data/gallery";
 
 export function Hero() {
@@ -38,11 +38,11 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button href={business.booking.base} target="_blank" rel="noopener noreferrer" size="lg">
-              <CalendarCheck className="h-5 w-5" aria-hidden="true" /> Boek afspraak
+            <Button href={business.phone.href} size="lg">
+              <Phone className="h-5 w-5" aria-hidden="true" /> {BOOK_LABEL}
             </Button>
-            <Button href={business.phone.href} variant="outline" size="lg">
-              <Phone className="h-5 w-5" aria-hidden="true" /> Bel direct
+            <Button href={directionsUrl} target="_blank" rel="noopener noreferrer" variant="outline" size="lg">
+              <Navigation className="h-5 w-5" aria-hidden="true" /> Route
             </Button>
           </div>
 

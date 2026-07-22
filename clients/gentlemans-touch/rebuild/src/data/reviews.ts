@@ -1,10 +1,10 @@
 /**
  * Reviews.
- *  - Headline rating + count: Google Maps (4.9 / 97 reviews) — see business.ts.
- *  - Review TEXT below is REAL, taken verbatim from the Setmore booking page's
- *    public reviews. Nothing is fabricated. The "😎"-only review is omitted as it
- *    has no readable content. If more/newer testimonials are wanted, pull them
- *    from Google with owner consent.
+ *  - Headline rating + count come from Google Maps (4.9 / 97) — see business.ts.
+ *  - No individual testimonial text is shown: the only review text previously
+ *    available came from a different (booking) source and cannot be attributed to
+ *    this business. Real testimonials can be added from Google with owner consent.
+ *    Nothing is fabricated.
  */
 export interface Review {
   author: string;
@@ -13,11 +13,4 @@ export interface Review {
   source: string;
 }
 
-export const reviews: Review[] = [
-  {
-    author: "Cinderella",
-    text: "Super goede kapper, neemt de tijd en maakt het gemakkelijk voor kinderen 👍",
-    timeAgo: "3 jaar geleden",
-    source: "Setmore",
-  },
-];
+export const reviews: Review[] = [];

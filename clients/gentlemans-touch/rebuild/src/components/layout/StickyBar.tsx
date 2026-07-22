@@ -2,7 +2,8 @@ import { Phone, Navigation, CalendarCheck } from "lucide-react";
 import { business, directionsUrl } from "@/data/business";
 
 /**
- * Mobile sticky action bar: Bellen · Route · Boek afspraak.
+ * Mobile sticky action bar: Bellen · Route · Afspraak.
+ * "Afspraak" falls back to calling the shop while online booking is unavailable.
  * z-40 keeps it above content but below the mobile menu (z-[60]/[70]).
  */
 export function StickyBar() {
@@ -29,13 +30,12 @@ export function StickyBar() {
           Route
         </a>
         <a
-          href={business.booking.base}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={business.phone.href}
+          aria-label="Afspraak aanvragen — bel de zaak"
           className="flex min-h-14 flex-col items-center justify-center gap-0.5 bg-cream text-xs font-semibold text-ink hover:bg-cream-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
         >
           <CalendarCheck className="h-5 w-5" aria-hidden="true" />
-          Boek afspraak
+          Afspraak
         </a>
       </div>
     </div>

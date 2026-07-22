@@ -1,8 +1,9 @@
 # Gentleman's Touch — Coders01 preview
 
 Premium local **sales preview** for the barbershop publicly branded **Gentleman's
-Touch** (Vlaardingen). Built from Google Maps (contact/hours/rating/photos) and
-Setmore (services/prices/booking/brand colours).
+Touch** (Vlaardingen). Business details (contact/hours/rating/photos) come from
+Google Maps; services, prices and the measured brand palette come from the owner's
+published materials.
 
 **Status: local preview only — do not deploy, do not commit yet.**
 
@@ -20,10 +21,12 @@ gentlemans-touch/
 
 ## Key facts
 
-- **Public brand:** Gentleman's Touch (Google listing + storefront sign). Legacy names
-  (Two-in-one-barberstudio, 2&1 Barber Studio, Fusion Pigment) are **not** shown publicly.
-- **⚠ Source mismatch:** Google = Vlaardingen / 06 42507856; Setmore booking = Rijswijk /
-  different phone. Google is authoritative per brief. See `docs/SOURCE-REPORT.md`.
+- **Public brand:** Gentleman's Touch (Google listing + storefront sign). Other
+  names appearing on old logo artwork are **not** shown publicly.
+- **Location/contact (Google):** Fransenstraat 27, 3131 CC Vlaardingen · 06 42507856 ·
+  4.9 (97 reviews).
+- **Booking:** no online booking system is linked yet. Appointment CTAs fall back to
+  calling the shop. See `docs/SOURCE-REPORT.md`.
 - **Palette (measured from logo):** black `#000000` · cream `#EEE2C2` · red `#A31E1F`.
 - **Photos are temporary Google previews** — replace with owner originals before production.
 

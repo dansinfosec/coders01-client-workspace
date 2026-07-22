@@ -1,6 +1,8 @@
-import { CalendarCheck } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
 import { services } from "@/data/services";
+import { business, BOOK_LABEL } from "@/data/business";
 
 export function Services() {
   return (
@@ -8,7 +10,7 @@ export function Services() {
       <SectionHeading
         eyebrow="Diensten & prijzen"
         title="Wat wij voor u doen"
-        intro="Vaste, eerlijke prijzen. Boek per behandeling direct online — of loop binnen."
+        intro="Vaste, eerlijke prijzen. Loop binnen of bel ons om een afspraak in te plannen."
       />
 
       <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -33,25 +35,19 @@ export function Services() {
               </div>
               <h3 className="mt-4 text-lg">{service.name}</h3>
               <p className="mt-2 flex-1 text-sm text-text-body">{service.description}</p>
-              {service.bookingUrl && (
-                <a
-                  href={service.bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-cream/40 px-4 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
-                >
-                  <CalendarCheck className="h-4 w-4" aria-hidden="true" /> Boek deze behandeling
-                </a>
-              )}
             </li>
           );
         })}
       </ul>
 
-      <p className="mt-6 text-sm text-text-muted">
-        Prijzen zoals vermeld op de online agenda. Haarpigmentatie en tattoo removal op afspraak —
-        vraag gerust naar de mogelijkheden.
-      </p>
+      <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+        <Button href={business.phone.href}>
+          <Phone className="h-5 w-5" aria-hidden="true" /> {BOOK_LABEL}
+        </Button>
+        <p className="text-sm text-text-muted">
+          Online boeken is binnenkort beschikbaar. Haarpigmentatie en tattoo removal op afspraak.
+        </p>
+      </div>
     </Section>
   );
 }

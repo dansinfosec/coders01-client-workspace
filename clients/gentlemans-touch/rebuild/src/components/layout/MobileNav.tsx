@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { X, Phone, CalendarCheck } from "lucide-react";
+import { X, Phone, Navigation } from "lucide-react";
 import { navItems } from "@/data/nav";
-import { business } from "@/data/business";
+import { business, BOOK_LABEL, directionsUrl } from "@/data/business";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/layout/Logo";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
@@ -114,11 +114,11 @@ export function MobileNav({ open, onClose, returnFocusRef }: MobileNavProps) {
           className="shrink-0 space-y-2 border-t border-line p-4"
           style={{ paddingBottom: "calc(1rem + var(--safe-bottom))" }}
         >
-          <Button href={business.booking.base} target="_blank" rel="noopener noreferrer" className="w-full">
-            <CalendarCheck className="h-5 w-5" aria-hidden="true" /> Boek afspraak
+          <Button href={business.phone.href} className="w-full">
+            <Phone className="h-5 w-5" aria-hidden="true" /> {BOOK_LABEL}
           </Button>
-          <Button href={business.phone.href} variant="outline" className="w-full">
-            <Phone className="h-5 w-5" aria-hidden="true" /> Bel direct
+          <Button href={directionsUrl} target="_blank" rel="noopener noreferrer" variant="outline" className="w-full">
+            <Navigation className="h-5 w-5" aria-hidden="true" /> Route
           </Button>
         </div>
       </div>
