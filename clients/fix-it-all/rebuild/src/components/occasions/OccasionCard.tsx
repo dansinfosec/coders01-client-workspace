@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Gauge, Fuel, Cog } from "lucide-react";
+import { ArrowRight, Gauge, Fuel, Cog, Calendar } from "lucide-react";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { OccasionMedia } from "@/components/occasions/OccasionMedia";
 import type { Occasion } from "@/data/occasions";
@@ -33,10 +33,10 @@ export function OccasionCard({ occasion: o, layout = "grid" }: OccasionCardProps
           <div>
             <h3 className="font-display text-lg font-bold text-text-strong">{o.title}</h3>
             <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-2xs uppercase tracking-label text-text-muted">
-              <li>{o.bouwjaar}</li>
-              <li>{formatKm(o.kmStand)}</li>
-              <li>{o.brandstof}</li>
-              <li>{o.transmissie ? transmissieLabel[o.transmissie] : o.carrosserie}</li>
+              <li className="min-w-0 break-words">{o.bouwjaar}</li>
+              <li className="min-w-0 break-words">{formatKm(o.kmStand)}</li>
+              <li className="min-w-0 break-words">{o.brandstof}</li>
+              <li className="min-w-0 break-words">{o.transmissie ? transmissieLabel[o.transmissie] : o.carrosserie}</li>
             </ul>
           </div>
           <div className="flex items-center justify-between gap-3">
@@ -65,21 +65,27 @@ export function OccasionCard({ occasion: o, layout = "grid" }: OccasionCardProps
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-display text-lg font-bold text-text-strong">{o.title}</h3>
-        <ul className="mt-3 grid grid-cols-2 gap-2 text-sm text-text-body">
-          <li className="flex items-center gap-2">
-            <Gauge className="h-4 w-4 shrink-0 text-petrol" aria-hidden /> {formatKm(o.kmStand)}
+        <ul className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm text-text-body">
+          <li className="flex min-w-0 items-start gap-2">
+            <Gauge className="mt-0.5 h-4 w-4 shrink-0 text-petrol" aria-hidden />
+            <span className="min-w-0 break-words leading-snug">{formatKm(o.kmStand)}</span>
           </li>
-          <li className="flex items-center gap-2">
-            <Fuel className="h-4 w-4 shrink-0 text-petrol" aria-hidden /> {o.brandstof}
+          <li className="flex min-w-0 items-start gap-2">
+            <Fuel className="mt-0.5 h-4 w-4 shrink-0 text-petrol" aria-hidden />
+            <span className="min-w-0 break-words leading-snug">{o.brandstof}</span>
           </li>
-          <li className="flex items-center gap-2">
-            <Cog className="h-4 w-4 shrink-0 text-petrol" aria-hidden /> {o.transmissie ? transmissieLabel[o.transmissie] : o.carrosserie}
+          <li className="flex min-w-0 items-start gap-2">
+            <Cog className="mt-0.5 h-4 w-4 shrink-0 text-petrol" aria-hidden />
+            <span className="min-w-0 break-words leading-snug">
+              {o.transmissie ? transmissieLabel[o.transmissie] : o.carrosserie}
+            </span>
           </li>
-          <li className="flex items-center gap-2 font-mono text-2xs uppercase tracking-label text-text-muted">
-            {o.bouwjaar}
+          <li className="flex min-w-0 items-start gap-2">
+            <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-petrol" aria-hidden />
+            <span className="min-w-0 break-words leading-snug">{o.bouwjaar}</span>
           </li>
         </ul>
-        <div className="mt-5 flex items-end justify-between gap-3 border-t border-line pt-4">
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-line pt-4">
           <span className={cn("font-display text-xl font-bold", sold ? "text-text-muted line-through" : "text-petrol-strong")}>
             {formatPrijs(o.prijs)}
           </span>
