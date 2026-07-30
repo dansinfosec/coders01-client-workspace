@@ -1,52 +1,57 @@
-# Beeldstrategie & (gegenereerde) assets
+# Gegenereerde & echte beeld-assets
 
-## Belangrijk: er zijn géén AI-beelden gegenereerd
+## 1. AI-gegenereerde dienstbeelden (illustratief)
 
-De opdracht vroeg om realistische automotive visuals (hero, werkplaats, dienstfoto's) te
-**genereren**. De beschikbare beeldgeneratie (Higgsfield) is op dit account **niet bruikbaar**:
-elke image-model gaf `free_trial_model_requires_plan` (betaald abonnement vereist) en de
-free-trial "unlim" is verlopen (`unlim.available: false`). Er is daarom **niets gegenereerd** —
-en dus wordt ook niets als "echte foto" gepresenteerd dat het niet is.
+Negen fotorealistische, **illustratieve** werkplaatsbeelden zijn gegenereerd met **Higgsfield**
+(model **nano_banana**, unlim-variant `nano_banana_flash`, 16:9, native 1376×768 → geüpscaled en
+gecropt naar **1600×900 WebP**, q82). Consistente Europese werkplaatsstijl, geen tekst/logo's.
 
-In plaats daarvan gebruikt de redesign **echte foto's** en nette graphite-treatments. Dat is
-eerlijker dan AI-beelden als echt materiaal tonen.
+> **Belangrijk:** dit zijn **AI-gegenereerde, illustratieve** beelden — géén echte foto's van het
+> team, pand of specifieke werkzaamheden. Alt-teksten zijn neutraal ("Illustratieve
+> werkplaatsomgeving — <dienst>") en presenteren ze nergens als echte documentatie.
 
-## Gebruikte echte beelden
+Lokale map: `public/assets/generated/services/` · Formaat: WebP 1600×900 (16:9).
 
-| Bestand | Doel | Pagina | Bron | Alt-tekst | Status |
-|---|---|---|---|---|---|
-| `public/assets/general/werkplaats-gevel.jpg` | Hero-achtergrond (full-width, met graphite-overlay) | Home | Echte foto van het Fix-it All-pand (uit occasion-listing Volvo V60, Autodealers-voorraad) | leeg (`aria-hidden`, decoratief) | In gebruik |
-| `public/assets/general/forecourt.jpg` | "Auto verkopen"-split beeld | Home | Echte foto van de oprit/gevel (uit occasion-listing Peugeot Partner) | "Auto's op de oprit voor onze werkplaats" | In gebruik |
-| `public/assets/occasions/<slug>/*.jpg` (292×) | Occasionfoto's | Occasions + detail + home-strook | Echte dealerfoto's (Autodealers-voorraad, did=5359) | per foto beschrijvend | In gebruik |
+| Slug | Bestand | Gebruikspagina('s) | Alt-tekst | Prompt (kern) |
+|---|---|---|---|---|
+| `apk-keuring` | `apk-keuring.webp` | Home (featured) + `/diensten/apk-keuring` | Illustratieve werkplaatsomgeving — APK-keuring | Keurmeester inspecteert auto op hefbrug met inspectielamp |
+| `onderhoud` | `auto-onderhoud.webp` | Home (medium) + `/diensten/onderhoud` | … — Onderhoud | Monteur voert onderhoud uit onder de motorkap |
+| `uitlaat-laswerk` | `uitlaat-laswerk.webp` | Home (medium) + `/diensten/uitlaat-laswerk` | … — Uitlaat & laswerk | Monteur last/repareert uitlaat onder auto op brug |
+| `airco-service` | `aircoservice.webp` | Home (medium) + `/diensten/airco-service` | … — Aircoservice | Technicus sluit aircoserviceapparatuur aan |
+| `bandenservice` | `bandenservice.webp` | Home (medium) + `/diensten/bandenservice` | … — Bandenservice | Monteur monteert/balanceert band op balanceermachine |
+| `diagnose` | `diagnose.webp` | Home (thumbnail) + `/diensten/diagnose` | … — Diagnose | Technicus met diagnosescanner aan OBD-poort |
+| `reparatie` | `reparatie.webp` | Home (thumbnail) + `/diensten/reparatie` | … — Reparatie | Monteur repareert remmen/ophanging met handgereedschap |
+| `kleine-beurt` | `kleine-beurt.webp` | Home (thumbnail) + `/diensten/kleine-beurt` | … — Kleine beurt | Olie- en filterverversing, inspectiemoment |
+| `grote-beurt` | `grote-beurt.webp` | Home (thumbnail) + `/diensten/grote-beurt` | … — Grote beurt | Uitgebreide beurt, auto op brug, meerdere controlepunten |
 
-> De twee `general/`-beelden zijn **echte** foto's van het pand van de klant (ze tonen de gevel met
-> "FIX-IT ALL"-bord en huisnummer 242). Ze komen uit de occasion-listings en zijn dus authentiek —
-> geen stock, geen AI. De hero gebruikt ze decoratief met een zware graphite-overlay.
+Gemeenschappelijke prompt-stijl: _"Photorealistic wide horizontal photo for a web card … modern
+tidy Dutch/European independent car repair workshop … dark graphite/charcoal colour grading with a
+subtle warm red accent glow … no text, no logos, no readable brand names, no watermarks, realistic
+undistorted hands and vehicles, no futuristic machines."_
 
-## Bewust NIET gedaan
+Centrale koppeling: `src/config/assets.ts` (`serviceImage[slug]`) — één plek, geen verspreide paden.
+Consumptie: `HomeServices.tsx` (featured + medium + thumbnail image cards, hover-zoom + card-lift) en
+`ServiceDetailPage.tsx` via `PageHero` (`image`-prop, gradient-overlay, titel-overlay). Fallback naar
+een graphite/blueprint-vlak **alleen** als een bestand echt ontbreekt (nooit een leeg zwart vlak).
 
-- **Geen AI-gegenereerde werkplaats-/monteur-/dienstfoto's.** De dienstpagina's en secties
-  gebruiken een graphite-hero + dienst-iconografie i.p.v. verzonnen fotografie. Zo wordt nergens
-  een gegenereerd/stock-beeld als "ons team" of "onze werkplaats" gepresenteerd.
-- **Geen misleidende claims** bij beelden (geen "ons team" bij personen).
+## 2. Echte beelden (geen AI)
 
-## Nog gewenste échte klantfoto's
+| Bestand | Doel | Bron | Alt |
+|---|---|---|---|
+| `public/assets/general/werkplaats-gevel.jpg` | Homepage-hero (graphite-overlay) | Echte foto van het pand (uit occasion-listing) | decoratief (`aria-hidden`) |
+| `public/assets/general/forecourt.jpg` | "Auto verkopen"-split | Echte foto van de oprit/gevel | "Auto's op de oprit voor onze werkplaats" |
+| `public/assets/occasions/<slug>/*.jpg` (292×) | Occasions | Echte dealerfoto's (Autodealers-voorraad) | per foto beschrijvend |
 
-Voor een volledig premium resultaat zijn eigen, professionele foto's van de klant nodig:
+## 3. Technische controle
 
-1. Werkplaatsinterieur (brug, servicebalie, netjes ingerichte werkplaats).
-2. Gevel/entree overdag (establishing shot).
-3. Dienst-actiefoto's: APK-keuring, onderhoud, banden, airco, uitlaat/laswerk, diagnose, reparatie.
-4. Teamfoto('s) — alleen met toestemming, voor "Over ons".
+- Alle 9 WebP-bestanden bestaan fysiek en worden bij `vite build` naar `dist/assets/generated/services/`
+  gekopieerd (geverifieerd).
+- Vite public-paths (`/assets/generated/services/<slug>.webp`) — geen 404's.
+- `loading="lazy"` buiten de hero/featured; `width`/`height` (1600×900) tegen layout shift.
+- Overlays geven voldoende contrast; hover-zoom/reveal respecteren `prefers-reduced-motion`.
 
-Plaats deze onder `public/assets/generated/services/` en `public/assets/generated/general/`
-(mappen zijn voorbereid) met SEO-vriendelijke namen, en koppel ze in de dienst- en homepagina's.
-Zolang die er niet zijn, blijft de huidige eerlijke graphite-uitstraling staan.
+## 4. Nog gewenst (echte klantfoto's)
 
-## Als beeldgeneratie later wél beschikbaar is
-
-Genereer met een fotorealistisch model, aspect 16:9 (hero's) en 4:3 (dienstkaarten), met een
-consistente grading: **donkere graphite-tonen + subtiel Fix-it All-rood accent**, Nederlands/Europees
-autobedrijf, neutrale kleding, geen leesbare tekst/logo's, geen futuristische showroom. Label ze in
-dit bestand als **AI-generated** en gebruik neutrale alt-teksten (bijv. "Illustratieve
-werkplaatsomgeving").
+De AI-beelden zijn illustratief. Voor maximale authenticiteit kan de klant later eigen foto's van de
+échte werkplaats/gevel/team aanleveren; die vervangen dan de illustratieve beelden via dezelfde
+`serviceImage`-mapping (zelfde paden of nieuwe onder `public/assets/`).

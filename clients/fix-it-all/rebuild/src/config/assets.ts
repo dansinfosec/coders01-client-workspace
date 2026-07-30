@@ -2,10 +2,9 @@
  * Centrale asset-mapping — alle beeldpaden op één plek (geen verspreide hardcoded paden).
  * Beelden staan in /public en worden via Vite als publieke URL geserveerd.
  *
- * BELANGRIJK: er zijn (nog) GEEN AI-gegenereerde beelden — beeldgeneratie was niet beschikbaar
- * (betaald plan vereist). De hero en auto-verkopensectie gebruiken echte foto's van het pand.
- * Dienstfoto's ontbreken; `serviceImage[slug]` is daarom `null` → de UI toont een nette graphite
- * fallback in plaats van een leeg/zwart vlak. Zie docs/GENERATED-ASSETS.md.
+ * De dienstbeelden onder /assets/generated/services/ zijn **AI-gegenereerde, illustratieve**
+ * werkplaatsbeelden (Higgsfield, model nano_banana; 16:9). Geen echte foto's van het team of pand.
+ * Zie docs/GENERATED-ASSETS.md. De hero en auto-verkopensectie gebruiken echte pandfoto's.
  */
 export const assets = {
   /** Homepage-hero — echte gevelfoto van het pand (met graphite-overlay). */
@@ -15,20 +14,22 @@ export const assets = {
 } as const;
 
 /**
- * Optionele hero-afbeelding per dienst (slug → pad in /public, of `null`).
- * Vul aan zodra er echte of gegenereerde dienstfoto's zijn onder
- * `public/assets/generated/services/`. `null` = graphite fallback.
+ * Hero-afbeelding per dienst (slug → pad in /public, of `null` als een bestand echt ontbreekt).
+ * Illustratieve AI-beelden, consistente Europese werkplaatsstijl.
  */
 export const serviceImage: Record<string, string | null> = {
-  "apk-keuring": null,
-  onderhoud: null,
-  "kleine-beurt": null,
-  "grote-beurt": null,
-  "uitlaat-laswerk": null,
-  "airco-service": null,
-  bandenservice: null,
-  reparatie: null,
-  diagnose: null,
+  "apk-keuring": "/assets/generated/services/apk-keuring.webp",
+  onderhoud: "/assets/generated/services/auto-onderhoud.webp",
+  "kleine-beurt": "/assets/generated/services/kleine-beurt.webp",
+  "grote-beurt": "/assets/generated/services/grote-beurt.webp",
+  "uitlaat-laswerk": "/assets/generated/services/uitlaat-laswerk.webp",
+  "airco-service": "/assets/generated/services/aircoservice.webp",
+  bandenservice: "/assets/generated/services/bandenservice.webp",
+  reparatie: "/assets/generated/services/reparatie.webp",
+  diagnose: "/assets/generated/services/diagnose.webp",
 };
 
 export const getServiceImage = (slug: string): string | null => serviceImage[slug] ?? null;
+
+/** Neutrale, eerlijke alt-tekst voor de illustratieve dienstbeelden. */
+export const serviceImageAlt = (label: string): string => `Illustratieve werkplaatsomgeving — ${label}`;

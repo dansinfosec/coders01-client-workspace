@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { services, getService } from "@/data/services";
+import { getServiceImage, serviceImageAlt } from "@/config/assets";
 import { company } from "@/data/company";
 import { paths } from "@/routes/paths";
 
@@ -11,8 +12,9 @@ const FEATURED = "apk-keuring";
 const MEDIUM = ["onderhoud", "uitlaat-laswerk", "airco-service", "bandenservice"];
 
 /**
- * Werkplaatsdiensten — editorial layout: één grote featured dienst, vier middelgrote kaarten
- * en de overige diensten compact als linklijst. Bewust géén raster van identieke kaartjes.
+ * Werkplaatsdiensten — editorial image-grid: één grote featured dienst met beeld, vier
+ * middelgrote image cards en de overige diensten als compacte thumbnails. Illustratieve
+ * werkplaatsbeelden (zie config/assets.ts); fallback naar graphite als een bestand ontbreekt.
  */
 export function HomeServices() {
   const featured = getService(FEATURED);
@@ -39,77 +41,92 @@ export function HomeServices() {
         </div>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {/* Featured */}
+          {/* Featured met beeld */}
           {featured && (
             <Link
               to={paths.dienst(featured.slug)}
-              className="group relative flex min-h-[18rem] flex-col justify-between overflow-hidden rounded-3xl bg-asphalt p-8 text-paper shadow-card transition-transform duration-300 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol sm:col-span-2 lg:row-span-2"
+              className="group relative flex min-h-[20rem] flex-col justify-between overflow-hidden rounded-3xl bg-asphalt text-paper shadow-card transition-transform duration-300 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol sm:col-span-2 lg:row-span-2"
             >
-              <div className="blueprint pointer-events-none absolute inset-0 opacity-30" aria-hidden />
-              <div
-                className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-petrol/30 blur-3xl"
-                aria-hidden
-              />
-              <div className="relative">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-2xs uppercase tracking-label text-paper/80">
+              <ServiceImg slug={featured.slug} label={featured.shortLabel} priority />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-asphalt-900 via-asphalt-900/70 to-asphalt-900/20" aria-hidden />
+              <div className="relative p-6 sm:p-8">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-asphalt-900/40 px-3 py-1 font-mono text-2xs uppercase tracking-label text-paper backdrop-blur">
                   <ShieldCheck className="h-3.5 w-3.5 text-petrol-soft" aria-hidden /> RDW-erkend
                 </span>
-                <h3 className="mt-5 font-display text-3xl font-bold leading-tight text-paper sm:text-4xl">
-                  {featured.title}
-                </h3>
-                <p className="mt-3 max-w-md text-paper/75">{featured.summary}</p>
               </div>
-              <div className="relative mt-8 flex flex-wrap items-center justify-between gap-4">
-                {company.offer && (
-                  <span className="font-mono text-2xs uppercase tracking-label text-torque">{company.offer.short}</span>
-                )}
-                <span className="inline-flex items-center gap-1.5 font-semibold text-paper transition-all group-hover:gap-2.5">
-                  Bekijk APK-keuring <ArrowRight className="h-5 w-5" aria-hidden />
-                </span>
+              <div className="relative p-6 sm:p-8">
+                <h3 className="font-display text-3xl font-bold leading-tight text-paper sm:text-4xl">{featured.title}</h3>
+                <p className="mt-3 max-w-md text-paper/85">{featured.summary}</p>
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                  {company.offer && (
+                    <span className="font-mono text-2xs uppercase tracking-label text-torque">{company.offer.short}</span>
+                  )}
+                  <span className="inline-flex items-center gap-1.5 font-semibold text-paper transition-all group-hover:gap-2.5">
+                    Bekijk APK-keuring <ArrowRight className="h-5 w-5" aria-hidden />
+                  </span>
+                </div>
               </div>
             </Link>
           )}
 
-          {/* Medium */}
-          {medium.map((s) => {
-            const Icon = s.icon;
-            return (
-              <Link
-                key={s.slug}
-                to={paths.dienst(s.slug)}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-petrol/40 hover:shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
-              >
-                <span className="absolute inset-x-0 top-0 h-1 bg-petrol/70" aria-hidden />
-                <div className="flex items-start justify-between gap-3">
-                  <Icon className="h-6 w-6 text-petrol" aria-hidden />
-                  <ArrowUpRight
-                    className="h-5 w-5 text-text-muted transition-colors group-hover:text-petrol"
-                    aria-hidden
-                  />
-                </div>
-                <h3 className="mt-4 font-display text-lg font-bold text-text-strong">{s.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-text-muted">{s.summary}</p>
-              </Link>
-            );
-          })}
+          {/* Medium image cards */}
+          {medium.map((s) => (
+            <Link
+              key={s.slug}
+              to={paths.dienst(s.slug)}
+              className="group relative flex min-h-[13rem] flex-col justify-end overflow-hidden rounded-2xl bg-asphalt text-paper shadow-soft transition-transform duration-300 hover:-translate-y-1 hover:shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
+            >
+              <ServiceImg slug={s.slug} label={s.shortLabel} />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-asphalt-900 via-asphalt-900/45 to-transparent" aria-hidden />
+              <div className="relative p-5">
+                <h3 className="font-display text-lg font-bold text-paper">{s.title}</h3>
+                <p className="mt-1 line-clamp-2 text-sm text-paper/80">{s.summary}</p>
+              </div>
+            </Link>
+          ))}
         </div>
 
-        {/* Overige diensten compact */}
+        {/* Overige diensten — compacte thumbnails */}
         {rest.length > 0 && (
-          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
-            <span className="font-mono text-2xs uppercase tracking-label text-text-muted">Ook mogelijk:</span>
+          <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {rest.map((s) => (
               <Link
                 key={s.slug}
                 to={paths.dienst(s.slug)}
-                className="inline-flex items-center gap-1 rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm font-medium text-text-body transition-colors hover:border-petrol hover:text-petrol focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
+                className="group overflow-hidden rounded-xl border border-line bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-petrol/40 hover:shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
               >
-                {s.shortLabel}
+                <div className="relative aspect-[16/10] overflow-hidden bg-asphalt">
+                  <ServiceImg slug={s.slug} label={s.shortLabel} />
+                </div>
+                <div className="flex items-center justify-between gap-2 p-3.5">
+                  <h3 className="font-display text-sm font-bold text-text-strong">{s.shortLabel}</h3>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-text-muted transition-colors group-hover:text-petrol" aria-hidden />
+                </div>
               </Link>
             ))}
           </div>
         )}
       </Container>
     </Section>
+  );
+}
+
+/** Dienstbeeld met hover-zoom; graphite fallback als het bestand ontbreekt. */
+function ServiceImg({ slug, label, priority }: { slug: string; label: string; priority?: boolean }) {
+  const src = getServiceImage(slug);
+  if (!src) {
+    // Fallback: subtiele blueprint op asphalt (geen leeg zwart vlak).
+    return <div className="blueprint absolute inset-0 opacity-40" aria-hidden />;
+  }
+  return (
+    <img
+      src={src}
+      alt={serviceImageAlt(label)}
+      width={1600}
+      height={900}
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out-expo group-hover:scale-105"
+    />
   );
 }

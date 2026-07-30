@@ -73,11 +73,15 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    /* Extra veiligheidsnet. De echte fix zit in MobileNav (de off-canvas drawer wordt door zijn
+       eigen viewport-groot `overflow-hidden`-vlak afgekapt); `clip` breekt position: sticky niet. */
+    overflow-x: clip;
   }
 
   body {
     @apply bg-paper font-sans text-text-body antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
   }
 
   h1, h2, h3, h4 {

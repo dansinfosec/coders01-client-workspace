@@ -16,19 +16,39 @@ interface PageHeroProps {
   crumbs?: Crumb[];
   children?: ReactNode;
   className?: string;
+  /** Optionele achtergrondafbeelding (bijv. dienst-hero). null/undefined = graphite-look. */
+  image?: string | null;
+  imageAlt?: string;
 }
 
 /** Standaard paginakop (donker asphalt-paneel) met breadcrumb. Herbruikbaar over subpagina's. */
-export function PageHero({ eyebrow, title, intro, crumbs, children, className }: PageHeroProps) {
+export function PageHero({ eyebrow, title, intro, crumbs, children, className, image, imageAlt }: PageHeroProps) {
   return (
     <section className={cn("relative overflow-hidden bg-asphalt text-paper", className)}>
-      <div className="blueprint pointer-events-none absolute inset-0 opacity-30" aria-hidden />
-      <div
-        className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-petrol/25 blur-3xl"
-        aria-hidden
-      />
+      {image ? (
+        <>
+          <img
+            src={image}
+            alt={imageAlt ?? ""}
+            aria-hidden={!imageAlt}
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-asphalt-900 via-asphalt-900/85 to-asphalt-900/45" aria-hidden />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-asphalt-900/85 to-transparent" aria-hidden />
+        </>
+      ) : (
+        <>
+          <div className="blueprint pointer-events-none absolute inset-0 opacity-30" aria-hidden />
+          <div
+            className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-petrol/25 blur-3xl"
+            aria-hidden
+          />
+        </>
+      )}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-asphalt-900/70 to-transparent" aria-hidden />
-      <Container className="relative py-14 sm:py-20">
+      <Container className={cn("relative py-14 sm:py-20", image && "flex min-h-[19rem] flex-col justify-end sm:min-h-[22rem]")}>
         {crumbs && crumbs.length > 0 && (
           <nav aria-label="Kruimelpad" className="mb-5">
             <ol className="flex flex-wrap items-center gap-1 font-mono text-2xs uppercase tracking-label text-paper/55">
