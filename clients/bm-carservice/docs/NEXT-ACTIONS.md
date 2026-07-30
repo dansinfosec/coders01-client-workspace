@@ -2,22 +2,27 @@
 
 _Datum: 2026-07-30_
 
-## Klaar (Fase 1–3)
+## Klaar (Fase 1–4)
 - [x] Live site gecrawld (`scraped/`, 33 tekstextracten in `scraped/text/`)
 - [x] Assets gedownload (`assets/original/`, 38 bestanden + `image-index.json`)
 - [x] Audit + inventarissen + sitemap + designrichting (`docs/`)
+- [x] **Rebuild gebouwd** (`rebuild/`): volledige React + Vite + strict TS + Tailwind-site —
+  alle routes (diensten, APK-hub + locaties, distributieketting-hub + merken, chiptuning, ANWB,
+  reviews, afspraak, contact, legal), designsysteem (receptiebord-hero, hazard-signature,
+  Archivo/IBM Plex), afspraakformulier (rhf + zod), SEO per pagina + `AutoRepair` JSON-LD.
+- [x] **Geverifieerd:** `npm run lint` (0 warnings) · `tsc --noEmit` · `npm run build` ·
+  browsercheck desktop (home, dienstdetail). Geen horizontale overflow, één `<h1>`, JSON-LD live.
 
-## Volgende (Fase 4 — Rebuild) — wacht op akkoord
-1. Scaffold `rebuild/` = kopie van de all-in-daktechniek-stack (Vite 5 + React 18 + strict TS
-   + Tailwind + router + react-hook-form/zod + react-helmet-async + lucide-react).
-2. Tailwind-config vullen met de tokens uit `DESIGN-DIRECTION.md`; fonts (Archivo, IBM Plex
-   Sans/Mono) laden.
-3. `src/data/*.ts` vullen uit `scraped/text/*.txt` (services, apk-locaties, distributieketting-
-   merken, company/navigation) — met `VERIFIED`/`PLACEHOLDER`-labels.
-4. Beelden optimaliseren → `assets/optimized/` → `public/images/bm-carservice/`.
-5. Pagina's + componenten bouwen volgens `SITEMAP-PROPOSAL.md` (dynamische templates).
-6. SEO: unieke titles/descriptions + `AutoRepair` structured data (zie `SEO-AUDIT.md`).
-7. Verify: lint · `tsc --noEmit` · build · responsive 320/375/390/430/desktop.
+## Nog te doen op de rebuild (klein / optioneel)
+- [x] **Foto's geplaatst** (luxe uitstraling): 8 geoptimaliseerde WebP's + `og-default.jpg` in
+  `rebuild/public/images/bm-carservice/`. Full-bleed glass-hero (workshop), "Onze garage"-
+  showcase (gevel/receptie/werkplaats met mono-captions), sfeerbeeld op dienstdetail, ANWB-
+  pechhulpfoto. Beeld-helper: `src/lib/images.ts` (met afmetingen → geen layout shift).
+1. **Mobiele visuele check** op echte 320/375/390/430 (tool-viewport kon niet verkleinen;
+   responsive-classes staan wel).
+2. `apple-touch-icon.png` toevoegen in `rebuild/public/` (favicon.svg + og-default staan er al).
+3. Eventueel meer/andere foto's: `assets/original/` bevat 37 stuks; pas de mapping in
+   `scripts/optimize-images.mjs`-stijl of `src/lib/images.ts` aan.
 
 ## TODO — bevestigen met klant (niet verzinnen)
 - [ ] KvK- en BTW-nummer

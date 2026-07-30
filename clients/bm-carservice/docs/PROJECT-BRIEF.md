@@ -41,5 +41,5 @@ _Datum: 2026-07-30_
 | 1. Crawl    | `scraped/`  | ✅ 50 pagina's (33 unieke content-pagina's + tekstextracten) |
 | 2. Assets   | `assets/`   | ✅ 38 bestanden (37 foto's + logo) in `original/` |
 | 3. Analyse  | `docs/`     | ✅ audit, content-, asset-, SEO-inventaris, sitemap, designrichting |
-| 4. Rebuild  | `rebuild/`  | ⬜ not started — wacht op akkoord |
-| 5. Verify   | —           | ⬜ not started |
+| 4. Rebuild  | `rebuild/`  | ✅ volledige React+TS-site (alle routes, designsysteem, SEO/JSON-LD, afspraakformulier) |
+| 5. Verify   | —           | ✅ lint 0 warnings · tsc --noEmit · vite build · browsercheck (desktop) |

@@ -1,0 +1,21 @@
+/** Central route paths. Existing live-site URLs are preserved 1:1 (no redirects, SEO-safe). */
+export const ROUTES = {
+  home: "/",
+  diensten: "/diensten",
+  serviceDetail: "/diensten/:slug",
+  remmenLegacy: "/remmen-vervangen",
+  apkHub: "/apk-zonder-afspraak",
+  apkVariant: "/apk-zonder-afspraak/:slug",
+  apkAmsterdam: "/apk-keuring-amsterdam",
+  apkAalsmeer: "/apk-keuring-aalsmeer",
+  apkUithoorn: "/apk-keuring-uithoorn",
+  distributieketting: "/distributieketting",
+  distributiekettingBrand: "/distributieketting/:slug",
+  chiptuning: "/chiptuning",
+  anwb: "/anwb",
+  reviews: "/reviews",
+  afspraak: "/afspraak",
+  contact: "/contact",
+  cookiebeleid: "/cookiebeleid",
+  privacy: "/privacy",
+} as const;

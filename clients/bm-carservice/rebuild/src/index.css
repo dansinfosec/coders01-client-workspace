@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  BM Carservice — design tokens (workshop-signage identity).
+  Palette: ink #15171C (werkplaats-antraciet) · signal #FFD100 (bewegwijzering, spaarzaam)
+           mark #D81E05 (BM-rood: alleen merk + hoofd-CTA) · concrete off-white · pass #1E7A46.
+  HSL channels so Tailwind can apply opacity via hsl(var(--x) / a).
+  Yellow is a SIGNAL colour (labels, accents, hazard stripe), never a flood fill.
+*/
+:root {
+  --ink: 222 14% 10%;
+  --ink-900: 223 17% 7%;
+  --ink-800: 222 14% 14%;
+  --ink-700: 222 13% 20%;
+  --ink-600: 222 12% 30%;
+
+  --signal: 49 100% 50%;        /* #FFD100 — tags, accents, hazard */
+  --signal-strong: 44 100% 32%; /* darker amber for the rare case yellow must be text */
+  --signal-soft: 49 100% 90%;
+
+  --mark: 8 94% 43%;            /* #D81E05 — brand + primary CTA */
+  --mark-strong: 8 96% 36%;     /* hover / text-on-light */
+
+  --pass: 146 61% 30%;          /* keuring goedgekeurd — very sparing */
+
+  --surface: 44 30% 98%;
+  --surface-muted: 46 22% 94%;
+
+  --text-strong: 222 16% 12%;
+  --text-body: 220 12% 26%;
+  --text-muted: 220 9% 44%;
+  --text-invert: 44 30% 96%;
+
+  --line: 40 12% 86%;
+  --line-invert: 222 12% 24%;
+
+  --focus: 222 45% 24%;
+  --error: 0 72% 45%;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@layer base {
+  * { border-color: hsl(var(--line)); }
+
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  body {
+    @apply bg-surface text-text-body font-sans antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-bold tracking-tight text-text-strong;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--focus));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link { @apply sr-only; }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-signal px-4 py-2 font-semibold text-ink shadow-soft;
+  }
+
+  /* Mono signage eyebrow — the "RECEPTIE / WERKPLAATS" reception-board language. */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-text-muted;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-2.5 w-2.5 bg-signal;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
