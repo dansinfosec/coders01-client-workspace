@@ -1,0 +1,308 @@
+{
+  "start_url": "https://bmcarservice.nl/",
+  "root_host": "bmcarservice.nl",
+  "started_at": "2026-07-30T13:06:29.231891+00:00",
+  "finished_at": "2026-07-30T13:07:57.241865+00:00",
+  "max_pages": 60,
+  "delay_seconds": 1.5,
+  "include_subdomains": false,
+  "successful": [
+    {
+      "url": "https://bmcarservice.nl/",
+      "status_code": 200,
+      "filename": "index-a621ecacc8.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/contact",
+      "status_code": 200,
+      "filename": "contact-e754f52047.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/afspraak-maken/details",
+      "status_code": 200,
+      "filename": "afspraak_maken_details-b7facf9469.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/anwb",
+      "status_code": 200,
+      "filename": "anwb-e20a227296.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/apk-zonder-afspraak",
+      "status_code": 200,
+      "filename": "apk_zonder_afspraak-c845a44881.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/afspraak-maken/details",
+      "status_code": 200,
+      "filename": "afspraak_maken_details-b7facf9469.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/apk-keuring-amsterdam",
+      "status_code": 200,
+      "filename": "apk_keuring_amsterdam-6c8fccfc6a.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/apk-keuring-aalsmeer",
+      "status_code": 200,
+      "filename": "apk_keuring_aalsmeer-18a49017eb.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/apk-keuring-uithoorn",
+      "status_code": 200,
+      "filename": "apk_keuring_uithoorn-97b633e9a0.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/apk-zonder-afspraak/apk-check-amstelveen",
+      "status_code": 200,
+      "filename": "apk_zonder_afspraak_apk_check_amstelveen-2305390086.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/apk-zonder-afspraak/apk-auto-amstelveen",
+      "status_code": 200,
+      "filename": "apk_zonder_afspraak_apk_auto_amstelveen-6c058584f5.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/chiptuning",
+      "status_code": 200,
+      "filename": "chiptuning-1322d586bc.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten",
+      "status_code": 200,
+      "filename": "diensten-0c90f38ac6.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/apk",
+      "status_code": 200,
+      "filename": "diensten_apk-bc26eb566f.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/onderhoud",
+      "status_code": 200,
+      "filename": "diensten_onderhoud-7ab9710fde.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/accu",
+      "status_code": 200,
+      "filename": "diensten_accu-5dfe8e5018.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/aircoservice",
+      "status_code": 200,
+      "filename": "diensten_aircoservice-ddcfcb0003.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/autobanden",
+      "status_code": 200,
+      "filename": "diensten_autobanden-a17f6233ea.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/reparatie",
+      "status_code": 200,
+      "filename": "diensten_reparatie-ecd42a384d.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/uitlaat-vervangen",
+      "status_code": 200,
+      "filename": "diensten_uitlaat_vervangen-df2c37d9cd.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/remmen-vervangen",
+      "status_code": 200,
+      "filename": "remmen_vervangen-9c9683e608.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/distributieriem-vervangen",
+      "status_code": 200,
+      "filename": "diensten_distributieriem_vervangen-6b4d41085e.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/distributieketting-vervangen",
+      "status_code": 200,
+      "filename": "diensten_distributieketting_vervangen-1136a4922f.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/storingsdiagnose",
+      "status_code": 200,
+      "filename": "diensten_storingsdiagnose-ac70331328.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/koppeling-vervangen",
+      "status_code": 200,
+      "filename": "diensten_koppeling_vervangen-460713c91e.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/autolampen",
+      "status_code": 200,
+      "filename": "diensten_autolampen-c6f6aab6b3.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/diensten/winterbanden",
+      "status_code": 200,
+      "filename": "diensten_winterbanden-77346ec259.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/distributieketting",
+      "status_code": 200,
+      "filename": "distributieketting-00542bb710.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/distributieketting/distributieketting-seat",
+      "status_code": 200,
+      "filename": "distributieketting_distributieketting_seat-3b0313b741.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/distributieketting/distributieketting-skoda",
+      "status_code": 200,
+      "filename": "distributieketting_distributieketting_skoda-0aa0e274f3.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/distributieketting/distributieketting-audi",
+      "status_code": 200,
+      "filename": "distributieketting_distributieketting_audi-9adfdaab42.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/distributieketting/distributieketting-vw",
+      "status_code": 200,
+      "filename": "distributieketting_distributieketting_vw-4f1cf057e1.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show",
+      "status_code": 200,
+      "filename": "reviews_show-10d2c284f4.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/cookiebeleid",
+      "status_code": 200,
+      "filename": "cookiebeleid-aa691c7c49.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/afspraak-maken/details",
+      "status_code": 200,
+      "filename": "afspraak_maken_details-b7facf9469.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=2",
+      "status_code": 200,
+      "filename": "reviews_show-318dc90da7.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=3",
+      "status_code": 200,
+      "filename": "reviews_show-23b9bd7277.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=15",
+      "status_code": 200,
+      "filename": "reviews_show-496ceaf980.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=1",
+      "status_code": 200,
+      "filename": "reviews_show-f11a145ff7.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=4",
+      "status_code": 200,
+      "filename": "reviews_show-4dbede018e.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=5",
+      "status_code": 200,
+      "filename": "reviews_show-312e834af8.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=14",
+      "status_code": 200,
+      "filename": "reviews_show-49020d1ca9.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=13",
+      "status_code": 200,
+      "filename": "reviews_show-22e3bb7da5.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=6",
+      "status_code": 200,
+      "filename": "reviews_show-e6ca83f610.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=7",
+      "status_code": 200,
+      "filename": "reviews_show-383b0d3249.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=12",
+      "status_code": 200,
+      "filename": "reviews_show-b9c9198f32.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=11",
+      "status_code": 200,
+      "filename": "reviews_show-33bbe2df62.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=8",
+      "status_code": 200,
+      "filename": "reviews_show-0248485bc2.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=9",
+      "status_code": 200,
+      "filename": "reviews_show-c2e12d40d6.html"
+    },
+    {
+      "url": "https://bmcarservice.nl/reviews/show?page=10",
+      "status_code": 200,
+      "filename": "reviews_show-eb4868d9db.html"
+    }
+  ],
+  "skipped": [
+    {
+      "url": "https://wa.me/+310203451566",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://twitter.com/i/flow/login?redirect_after_login=%2FBmCarservice",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://www.anwb.nl/wegenwacht",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://api.whatsapp.com/send?phone=31203451566&text&type=phone_number&app_absent=0",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://www.google.com/maps/dir?api=1&destination=Bouwerij 69A Amstelveen",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://dt-dev1.s3.eu-central-1.amazonaws.com/files/62/72/6272b510-41e6-11f0-9748-65b3ba370baf",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://policies.google.com/terms",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://policies.google.com/privacy",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://www.autosociaal.nl/?utm_source=dealertemplates+websites&utm_medium=powered+by&utm_campaign=dealertemplates+websites",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://www.klantenvertellen.nl/reviews/1064865/BM-Carservice",
+      "reason": "off_domain"
+    },
+    {
+      "url": "https://www.klantenvertellen.nl/add-review/1064865/BM-Carservice",
+      "reason": "off_domain"
+    }
+  ],
+  "errors": []
+}

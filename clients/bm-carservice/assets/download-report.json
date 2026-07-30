@@ -1,0 +1,20 @@
+{
+  "client": "bm-carservice",
+  "root_host": "bmcarservice.nl",
+  "started_at": "2026-07-30T13:10:25.354664+00:00",
+  "finished_at": "2026-07-30T13:10:26.890448+00:00",
+  "dry_run": true,
+  "max_images": null,
+  "delay_seconds": 1.0,
+  "totals": {
+    "discovered": 200,
+    "downloaded": 0,
+    "skipped": 100,
+    "duplicates": 98,
+    "errors": 0,
+    "planned": 2
+  },
+  "skip_reasons": {
+    "svg": 100
+  }
+}

@@ -1,0 +1,426 @@
+{
+  "client": "bm-carservice",
+  "source": "cdn.autosociaal.nl + bmcarservice.nl",
+  "extracted_from": "scraped/pages",
+  "count": 38,
+  "images": [
+    {
+      "local_filename": "00-2f-c22f16e0-d1c1-11ef-973c-1dc6677bb110.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w1080/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy9jMi8yZi9jMjJmMTZlMC1kMWMxLTExZWYtOTczYy0xZGM2Njc3YmIxMTA=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "anwb-e20a227296.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 55018,
+      "status": "ok"
+    },
+    {
+      "local_filename": "01-63-3363ff70-efad-11ef-b53e-d5b26bd77cb2.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8zMy82My8zMzYzZmY3MC1lZmFkLTExZWYtYjUzZS1kNWIyNmJkNzdjYjI=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "apk_keuring_aalsmeer-18a49017eb.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 153342,
+      "status": "ok"
+    },
+    {
+      "local_filename": "02-0d-2f0d3ee0-efad-11ef-986c-f7238f8892c0.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8yZi8wZC8yZjBkM2VlMC1lZmFkLTExZWYtOTg2Yy1mNzIzOGY4ODkyYzA=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "apk_keuring_amsterdam-6c8fccfc6a.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 161338,
+      "status": "ok"
+    },
+    {
+      "local_filename": "03-e8-36e85ea0-efad-11ef-a1b2-3f674db9f953.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8zNi9lOC8zNmU4NWVhMC1lZmFkLTExZWYtYTFiMi0zZjY3NGRiOWY5NTM=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "apk_keuring_uithoorn-97b633e9a0.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 142064,
+      "status": "ok"
+    },
+    {
+      "local_filename": "04-e8-95e8c4c0-3a02-11ef-b503-6dc07a46ddd0.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy85NS9lOC85NWU4YzRjMC0zYTAyLTExZWYtYjUwMy02ZGMwN2E0NmRkZDA=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "apk_zonder_afspraak-c845a44881.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 166718,
+      "status": "ok"
+    },
+    {
+      "local_filename": "05-cd-3ecdae80-efad-11ef-90e0-9541d8037fb7.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8zZS9jZC8zZWNkYWU4MC1lZmFkLTExZWYtOTBlMC05NTQxZDgwMzdmYjc=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "apk_zonder_afspraak_apk_auto_amstelveen-6c058584f5.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185782,
+      "status": "ok"
+    },
+    {
+      "local_filename": "06-f2-39f27630-efad-11ef-a0aa-0733d25d9eb8.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8zOS9mMi8zOWYyNzYzMC1lZmFkLTExZWYtYTBhYS0wNzMzZDI1ZDllYjg=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "apk_zonder_afspraak_apk_check_amstelveen-2305390086.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 199968,
+      "status": "ok"
+    },
+    {
+      "local_filename": "07-55-425563e0-efad-11ef-90a6-5f99153fda96.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy80Mi81NS80MjU1NjNlMC1lZmFkLTExZWYtOTBhNi01Zjk5MTUzZmRhOTY=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "chiptuning-1322d586bc.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 141436,
+      "status": "ok"
+    },
+    {
+      "local_filename": "08-83-1f8309a0-dc85-11ee-b79d-a19676fa40c7.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8xZi84My8xZjgzMDlhMC1kYzg1LTExZWUtYjc5ZC1hMTk2NzZmYTQwYzc=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten-0c90f38ac6.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 199968,
+      "status": "ok"
+    },
+    {
+      "local_filename": "09-11-4f110050-efad-11ef-a792-d3e95da920c3.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy80Zi8xMS80ZjExMDA1MC1lZmFkLTExZWYtYTc5Mi1kM2U5NWRhOTIwYzM=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_accu-5dfe8e5018.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 141760,
+      "status": "ok"
+    },
+    {
+      "local_filename": "10-b4-58b4e8e0-efad-11ef-a1f1-b3b604c524d1.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy81OC9iNC81OGI0ZThlMC1lZmFkLTExZWYtYTFmMS1iM2I2MDRjNTI0ZDE=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_aircoservice-ddcfcb0003.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 199968,
+      "status": "ok"
+    },
+    {
+      "local_filename": "11-0c-470cee40-efad-11ef-b210-4db82d88ecd6.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy80Ny8wYy80NzBjZWU0MC1lZmFkLTExZWYtYjIxMC00ZGI4MmQ4OGVjZDY=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_apk-bc26eb566f.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185782,
+      "status": "ok"
+    },
+    {
+      "local_filename": "12-c3-5cc378a0-efad-11ef-8252-bf31abaf8f3e.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy81Yy9jMy81Y2MzNzhhMC1lZmFkLTExZWYtODI1Mi1iZjMxYWJhZjhmM2U=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_autobanden-a17f6233ea.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 147320,
+      "status": "ok"
+    },
+    {
+      "local_filename": "13-94-8d94d390-efad-11ef-948a-53aeca3ca462.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy84ZC85NC84ZDk0ZDM5MC1lZmFkLTExZWYtOTQ4YS01M2FlY2EzY2E0NjI=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_autolampen-c6f6aab6b3.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185782,
+      "status": "ok"
+    },
+    {
+      "local_filename": "14-6f-7e6fd980-efad-11ef-bc14-474a50c49be8.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy83ZS82Zi83ZTZmZDk4MC1lZmFkLTExZWYtYmMxNC00NzRhNTBjNDliZTg=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_distributieketting_vervangen-1136a4922f.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 165440,
+      "status": "ok"
+    },
+    {
+      "local_filename": "15-f7-76f72b80-efad-11ef-99e7-073f4006fd16.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy83Ni9mNy83NmY3MmI4MC1lZmFkLTExZWYtOTllNy0wNzNmNDAwNmZkMTY=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_distributieriem_vervangen-6b4d41085e.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185782,
+      "status": "ok"
+    },
+    {
+      "local_filename": "16-28-86289b30-efad-11ef-8bcb-5fa1f771c0d3.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy84Ni8yOC84NjI4OWIzMC1lZmFkLTExZWYtOGJjYi01ZmExZjc3MWMwZDM=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_koppeling_vervangen-460713c91e.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 142566,
+      "status": "ok"
+    },
+    {
+      "local_filename": "17-d9-4ad9e240-efad-11ef-843c-b1f732586bd1.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy80YS9kOS80YWQ5ZTI0MC1lZmFkLTExZWYtODQzYy1iMWY3MzI1ODZiZDE=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_onderhoud-7ab9710fde.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 220688,
+      "status": "ok"
+    },
+    {
+      "local_filename": "18-96-6296bee0-efad-11ef-8cd1-8b99e0396b84.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy82Mi85Ni82Mjk2YmVlMC1lZmFkLTExZWYtOGNkMS04Yjk5ZTAzOTZiODQ=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_reparatie-ecd42a384d.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 199968,
+      "status": "ok"
+    },
+    {
+      "local_filename": "19-98-82980250-efad-11ef-9d68-7f675b9da2d6.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy84Mi85OC84Mjk4MDI1MC1lZmFkLTExZWYtOWQ2OC03ZjY3NWI5ZGEyZDY=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_storingsdiagnose-ac70331328.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 158306,
+      "status": "ok"
+    },
+    {
+      "local_filename": "20-e6-6ee6bbc0-efad-11ef-bd2d-d923d2c3ba79.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy82ZS9lNi82ZWU2YmJjMC1lZmFkLTExZWYtYmQyZC1kOTIzZDJjM2JhNzk=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_uitlaat_vervangen-df2c37d9cd.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185782,
+      "status": "ok"
+    },
+    {
+      "local_filename": "21-e1-91e13460-efad-11ef-a4f0-b19514afa3c0.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy85MS9lMS85MWUxMzQ2MC1lZmFkLTExZWYtYTRmMC1iMTk1MTRhZmEzYzA=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "diensten_winterbanden-77346ec259.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185782,
+      "status": "ok"
+    },
+    {
+      "local_filename": "22-58-26586e70-dc7f-11ee-844c-1be1d5cfa625.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8yNi81OC8yNjU4NmU3MC1kYzdmLTExZWUtODQ0Yy0xYmUxZDVjZmE2MjU=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "distributieketting-00542bb710.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 220688,
+      "status": "ok"
+    },
+    {
+      "local_filename": "23-71-a57128c0-dc83-11ee-a4e8-a10c9673b2c1.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy9hNS83MS9hNTcxMjhjMC1kYzgzLTExZWUtYTRlOC1hMTBjOTY3M2IyYzE=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "distributieketting_distributieketting_audi-9adfdaab42.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 220688,
+      "status": "ok"
+    },
+    {
+      "local_filename": "24-6a-556a0e00-3a04-11ef-a965-e739ae3654af.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy81NS82YS81NTZhMGUwMC0zYTA0LTExZWYtYTk2NS1lNzM5YWUzNjU0YWY=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "distributieketting_distributieketting_seat-3b0313b741.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 177034,
+      "status": "ok"
+    },
+    {
+      "local_filename": "25-1a-361a12e0-3a04-11ef-a919-d5734db154f2.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8zNi8xYS8zNjFhMTJlMC0zYTA0LTExZWYtYTkxOS1kNTczNGRiMTU0ZjI=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "distributieketting_distributieketting_skoda-0aa0e274f3.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 185268,
+      "status": "ok"
+    },
+    {
+      "local_filename": "26-87-6187d860-dc82-11ee-adb1-db037a5094a8.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy82MS84Ny82MTg3ZDg2MC1kYzgyLTExZWUtYWRiMS1kYjAzN2E1MDk0YTg=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "distributieketting_distributieketting_vw-4f1cf057e1.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 220688,
+      "status": "ok"
+    },
+    {
+      "local_filename": "27-f5-f1f53c30-5319-11ef-88b4-0324242ec1b0.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/b2560x1270/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy9mMS9mNS9mMWY1M2MzMC01MzE5LTExZWYtODhiNC0wMzI0MjQyZWMxYjA=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 64096,
+      "status": "ok"
+    },
+    {
+      "local_filename": "28-da-2cda7b10-d35c-11ef-b98e-376bc3147674.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/b2560x1270/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8yYy9kYS8yY2RhN2IxMC1kMzVjLTExZWYtYjk4ZS0zNzZiYzMxNDc2NzQ=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 130652,
+      "status": "ok"
+    },
+    {
+      "local_filename": "29-f6-def6fee0-d1ba-11ef-a890-6f3408416ec6.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/b2560x1270/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy9kZS9mNi9kZWY2ZmVlMC1kMWJhLTExZWYtYTg5MC02ZjM0MDg0MTZlYzY=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 117576,
+      "status": "ok"
+    },
+    {
+      "local_filename": "30-49-0b4932e0-d1b9-11ef-baaf-41fd59acd31e.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/b2560x1270/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8wYi80OS8wYjQ5MzJlMC1kMWI5LTExZWYtYmFhZi00MWZkNTlhY2QzMWU=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 128480,
+      "status": "ok"
+    },
+    {
+      "local_filename": "31-88-26885320-d1b9-11ef-821f-5b85b28ad39a.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/b2560x1270/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy8yNi84OC8yNjg4NTMyMC1kMWI5LTExZWYtODIxZi01Yjg1YjI4YWQzOWE=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 133024,
+      "status": "ok"
+    },
+    {
+      "local_filename": "32-17-71175bc0-5069-11ef-a97a-c1f8845e4f6c.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w1080/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy83MS8xNy83MTE3NWJjMC01MDY5LTExZWYtYTk3YS1jMWY4ODQ1ZTRmNmM=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 65252,
+      "status": "ok"
+    },
+    {
+      "local_filename": "33-0b-6a0bbaf0-506a-11ef-9d8d-351cfa681f2d.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w1000/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy82YS8wYi82YTBiYmFmMC01MDZhLTExZWYtOWQ4ZC0zNTFjZmE2ODFmMmQ=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 40636,
+      "status": "ok"
+    },
+    {
+      "local_filename": "34-06-7806bf40-506a-11ef-80e5-cd6ceb3b78d2.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w1000/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy83OC8wNi83ODA2YmY0MC01MDZhLTExZWYtODBlNS1jZDZjZWIzYjc4ZDI=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 38346,
+      "status": "ok"
+    },
+    {
+      "local_filename": "35-ee-87ee12a0-506a-11ef-8b14-db2b5ae09d39.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w1000/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy84Ny9lZS84N2VlMTJhMC01MDZhLTExZWYtOGIxNC1kYjJiNWFlMDlkMzk=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "index-a621ecacc8.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 41408,
+      "status": "ok"
+    },
+    {
+      "local_filename": "36-c1-72c1d530-efad-11ef-8343-8de1f8eed9f1.webp",
+      "image_url": "https://cdn.autosociaal.nl/dtweb/images/thumb/w2560/ZHQtZGV2MS5zMy5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbS9maWxlcy83Mi9jMS83MmMxZDUzMC1lZmFkLTExZWYtODM0My04ZGUxZjhlZWQ5ZjE=.webp",
+      "kind": "photo",
+      "source_pages": [
+        "remmen_vervangen-9c9683e608.html"
+      ],
+      "size_variants_available": 1,
+      "file_size": 143212,
+      "status": "ok"
+    },
+    {
+      "local_filename": "37-bm-logo.jpg",
+      "image_url": "https://dt-dev1.s3.eu-central-1.amazonaws.com/files/a4/31/a4314b64a5d974e7b6c4bce81646f841?position=centered",
+      "kind": "logo",
+      "source_pages": [
+        "(header, all pages)"
+      ],
+      "size_variants_available": 1,
+      "file_size": 30473,
+      "status": "ok"
+    }
+  ]
+}
