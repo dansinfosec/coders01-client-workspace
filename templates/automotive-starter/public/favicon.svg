@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Autobedrijf">
+  <!-- Placeholder-favicon (primary). TODO: vervang door de officiële merk-favicon van de klant. -->
+  <rect width="32" height="32" rx="7" fill="#0C6E6A"/>
+  <path d="M16 8l7 5v1.8h-1.6V22h-3.1v-4.2h-4.6V22H10.6v-6.4H9V13z" fill="#F5F3EF"/>
+</svg>

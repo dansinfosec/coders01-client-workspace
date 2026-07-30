@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/apk-keuring", "destination": "/diensten/apk-keuring", "permanent": true },
+    { "source": "/apk-keuring-utrecht", "destination": "/diensten/apk-keuring", "permanent": true },
+    { "source": "/goedkope-apk-utrecht", "destination": "/diensten/apk-keuring", "permanent": true },
+    { "source": "/kleine-beurt", "destination": "/diensten/kleine-beurt", "permanent": true },
+    { "source": "/grote-beurt", "destination": "/diensten/grote-beurt", "permanent": true },
+    { "source": "/onderhoud-auto", "destination": "/diensten/onderhoud", "permanent": true },
+    { "source": "/uitlaat-lassen-utrecht", "destination": "/diensten/uitlaat-laswerk", "permanent": true },
+    { "source": "/uitlaat-kapot-utrecht", "destination": "/diensten/uitlaat-laswerk", "permanent": true },
+    { "source": "/airco-service", "destination": "/diensten/airco-service", "permanent": true },
+    { "source": "/bandenservice", "destination": "/diensten/bandenservice", "permanent": true },
+    { "source": "/autos-gezocht", "destination": "/auto-verkopen", "permanent": true },
+    { "source": "/vacature", "destination": "/vacatures", "permanent": true },
+    { "source": "/product/:slug", "destination": "/occasions/:slug", "permanent": true }
+  ],
+  "rewrites": [{ "source": "/((?!api).*)", "destination": "/index.html" }]
+}
