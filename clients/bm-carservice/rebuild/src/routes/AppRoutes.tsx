@@ -7,8 +7,11 @@ import { ApkHubPage } from "@/pages/ApkHubPage";
 import { DistributiekettingHubPage } from "@/pages/DistributiekettingHubPage";
 import { LandingPage } from "@/pages/LandingPage";
 import { ReviewsPage } from "@/pages/ReviewsPage";
-import { AfspraakPage } from "@/pages/AfspraakPage";
+import { AfspraakMakenPage } from "@/pages/AfspraakMakenPage";
 import { ContactPage } from "@/pages/ContactPage";
+import { VestigingenPage } from "@/pages/VestigingenPage";
+import { VestigingDetailPage } from "@/pages/VestigingDetailPage";
+import { OverOnsPage } from "@/pages/OverOnsPage";
 import { LegalPage } from "@/pages/LegalPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { ROUTES } from "@/routes/paths";
@@ -39,13 +42,19 @@ export function AppRoutes() {
         <Route path={ROUTES.chiptuning} element={<LandingPage />} />
         <Route path={ROUTES.anwb} element={<LandingPage />} />
 
-        <Route path={ROUTES.reviews} element={<ReviewsPage />} />
-        <Route path={ROUTES.afspraak} element={<AfspraakPage />} />
-        <Route path={ROUTES.contact} element={<ContactPage />} />
+        {/* Locations */}
+        <Route path="/vestigingen" element={<VestigingenPage />} />
+        <Route path="/vestigingen/:slug" element={<VestigingDetailPage />} />
+        <Route path="/over-ons" element={<OverOnsPage />} />
 
-        {/* Legacy appointment URLs → canonical /afspraak */}
-        <Route path="/afspraak-maken" element={<Navigate to={ROUTES.afspraak} replace />} />
-        <Route path="/afspraak-maken/details" element={<Navigate to={ROUTES.afspraak} replace />} />
+        <Route path={ROUTES.reviews} element={<ReviewsPage />} />
+
+        {/* Appointment module (canonical) + legacy redirects */}
+        <Route path={ROUTES.afspraakMaken} element={<AfspraakMakenPage />} />
+        <Route path="/afspraak-maken/details" element={<Navigate to={ROUTES.afspraakMaken} replace />} />
+        <Route path={ROUTES.afspraak} element={<Navigate to={ROUTES.afspraakMaken} replace />} />
+
+        <Route path={ROUTES.contact} element={<ContactPage />} />
 
         <Route path={ROUTES.cookiebeleid} element={<LegalPage kind="cookiebeleid" />} />
         <Route path={ROUTES.privacy} element={<LegalPage kind="privacy" />} />

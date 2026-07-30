@@ -22,7 +22,7 @@ export function CTASection({
           <p className="mt-3 text-text-invert/80">{text}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Button to="/afspraak" variant="mark" size="lg">Maak een afspraak</Button>
+          <Button to="/afspraak-maken" variant="mark" size="lg">Maak een afspraak</Button>
           <Button href={company.phone.href} variant="onInk" size="lg">
             <Phone className="h-5 w-5" /> {company.phone.display}
           </Button>

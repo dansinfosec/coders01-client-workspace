@@ -1,6 +1,4 @@
-import { services, servicePath } from "./services";
-import { apkHub, apkLandings } from "./apkLandings";
-import { distributiekettingHub, distributiekettingBrands } from "./distributieketting";
+import { locations } from "./locations";
 
 export interface NavLink {
   label: string;
@@ -8,40 +6,41 @@ export interface NavLink {
 }
 export interface NavItem {
   label: string;
-  to?: string;
-  /** When present, renders a dropdown. */
+  /** Landing route for the item itself (also the dropdown's own link). */
+  to: string;
+  /** When present, renders an accessible dropdown / expandable submenu. */
   children?: NavLink[];
 }
 
-/** Primary header navigation. Afspraak/Bel live as CTAs, not in this list. */
+/**
+ * Single source of truth for primary navigation — used by BOTH the desktop nav and the
+ * mobile drawer (never duplicate link data). Afspraak maken is a CTA, not a nav item.
+ */
 export const primaryNav: NavItem[] = [
   { label: "Home", to: "/" },
-  {
-    label: "APK",
-    to: apkHub.path,
-    children: [
-      { label: "APK zonder afspraak", to: apkHub.path },
-      ...apkLandings.map((l) => ({ label: l.title, to: l.path })),
-    ],
-  },
   {
     label: "Diensten",
     to: "/diensten",
     children: [
       { label: "Alle diensten", to: "/diensten" },
-      ...services.map((s) => ({ label: s.title, to: servicePath(s) })),
+      { label: "APK zonder afspraak", to: "/apk-zonder-afspraak" },
+      { label: "Auto onderhoud", to: "/diensten/onderhoud" },
+      { label: "Autobanden", to: "/diensten/autobanden" },
+      { label: "Autoreparatie", to: "/diensten/reparatie" },
+      { label: "Distributieketting", to: "/distributieketting" },
+      { label: "Chiptuning", to: "/chiptuning" },
+      { label: "ANWB Partnerbedrijf", to: "/anwb" },
     ],
   },
   {
-    label: "Distributieketting",
-    to: distributiekettingHub.path,
+    label: "Vestigingen",
+    to: "/vestigingen",
     children: [
-      { label: "Overzicht & prijzen", to: distributiekettingHub.path },
-      ...distributiekettingBrands.map((b) => ({ label: b.title.replace("Distributieketting ", "").replace(" vervangen", ""), to: b.path })),
+      ...locations.map((l) => ({ label: l.city, to: `/vestigingen/${l.slug}` })),
+      { label: "Alle vestigingen", to: "/vestigingen" },
     ],
   },
-  { label: "Chiptuning", to: "/chiptuning" },
-  { label: "ANWB", to: "/anwb" },
+  { label: "Over BM Carservice", to: "/over-ons" },
   { label: "Reviews", to: "/reviews" },
   { label: "Contact", to: "/contact" },
 ];
@@ -51,30 +50,27 @@ export const footerNav: Array<{ heading: string; links: NavLink[] }> = [
   {
     heading: "Diensten",
     links: [
-      { label: "APK zonder afspraak", to: apkHub.path },
+      { label: "APK zonder afspraak", to: "/apk-zonder-afspraak" },
       { label: "Auto onderhoud", to: "/diensten/onderhoud" },
       { label: "Autobanden", to: "/diensten/autobanden" },
-      { label: "Autoreparatie", to: "/diensten/reparatie" },
-      { label: "Distributieketting", to: distributiekettingHub.path },
+      { label: "Distributieketting", to: "/distributieketting" },
       { label: "Alle diensten", to: "/diensten" },
     ],
   },
   {
-    heading: "APK & locaties",
+    heading: "Vestigingen",
     links: [
-      { label: "APK Amsterdam", to: "/apk-keuring-amsterdam" },
-      { label: "APK Aalsmeer", to: "/apk-keuring-aalsmeer" },
-      { label: "APK Uithoorn", to: "/apk-keuring-uithoorn" },
-      { label: "APK check Amstelveen", to: "/apk-zonder-afspraak/apk-check-amstelveen" },
+      ...locations.map((l) => ({ label: `Vestiging ${l.city}`, to: `/vestigingen/${l.slug}` })),
+      { label: "Alle vestigingen", to: "/vestigingen" },
     ],
   },
   {
     heading: "BM Carservice",
     links: [
+      { label: "Over BM Carservice", to: "/over-ons" },
       { label: "ANWB Partnerbedrijf", to: "/anwb" },
-      { label: "Chiptuning", to: "/chiptuning" },
       { label: "Reviews", to: "/reviews" },
-      { label: "Afspraak maken", to: "/afspraak" },
+      { label: "Afspraak maken", to: "/afspraak-maken" },
       { label: "Contact", to: "/contact" },
     ],
   },

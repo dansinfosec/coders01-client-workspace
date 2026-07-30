@@ -55,7 +55,7 @@ export function Hero() {
           <p className="mt-5 max-w-xl text-lg text-text-invert/85">{company.intro}</p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button to="/afspraak" variant="mark" size="lg">
+            <Button to="/afspraak-maken" variant="mark" size="lg">
               Maak een afspraak
             </Button>
             <Button href={company.phone.href} variant="onInk" size="lg">

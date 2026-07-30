@@ -14,6 +14,7 @@ export const ROUTES = {
   chiptuning: "/chiptuning",
   anwb: "/anwb",
   reviews: "/reviews",
+  afspraakMaken: "/afspraak-maken",
   afspraak: "/afspraak",
   contact: "/contact",
   cookiebeleid: "/cookiebeleid",

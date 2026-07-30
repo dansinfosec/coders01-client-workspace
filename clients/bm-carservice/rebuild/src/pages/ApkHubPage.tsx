@@ -29,7 +29,7 @@ export function ApkHubPage() {
           <Button href={company.phone.href} variant="mark">
             <Phone className="h-4 w-4" /> Bel voor de APK
           </Button>
-          <Button to="/afspraak" variant="onInk">Liever op afspraak</Button>
+          <Button to="/afspraak-maken" variant="onInk">Liever op afspraak</Button>
         </div>
       </PageHero>
 

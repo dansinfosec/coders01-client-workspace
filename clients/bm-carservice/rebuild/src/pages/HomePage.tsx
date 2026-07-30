@@ -40,7 +40,7 @@ export function HomePage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button to="/apk-zonder-afspraak" variant="mark">Alles over de APK</Button>
-              <Button to="/afspraak" variant="outline">Toch liever op afspraak?</Button>
+              <Button to="/afspraak-maken" variant="outline">Toch liever op afspraak?</Button>
             </div>
           </div>
           <UspList className="rounded-2xl border border-line bg-surface-muted p-6" />

@@ -1,10 +1,10 @@
 import { company } from "@/data/company";
-import { formatRanges } from "@/lib/openingHours";
+import { formatRanges, type OpeningHours as Hours } from "@/lib/openingHours";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { cn } from "@/utils/cn";
 
-/** Opening-hours board (mono) with live status. Used on home + contact. */
-export function OpeningHours({ className }: { className?: string }) {
+/** Opening-hours board (mono) with live status. Defaults to HQ hours; pass `hours` per branch. */
+export function OpeningHours({ className, hours = company.openingHours }: { className?: string; hours?: Hours }) {
   const todayWeekday = new Date().getDay();
   return (
     <div className={cn("rounded-2xl border border-line bg-surface p-6 shadow-soft", className)}>
@@ -12,10 +12,10 @@ export function OpeningHours({ className }: { className?: string }) {
         <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">
           Openingstijden
         </h3>
-        <StatusPill />
+        <StatusPill hours={hours} />
       </div>
       <dl className="mt-4 divide-y divide-line font-mono text-sm">
-        {company.openingHours.map((day) => {
+        {hours.map((day) => {
           const isToday = day.weekday === todayWeekday;
           const closed = day.ranges.length === 0;
           return (

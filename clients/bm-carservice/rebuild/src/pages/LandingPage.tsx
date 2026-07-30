@@ -43,7 +43,7 @@ export function LandingPage() {
       <SEO title={content.seoTitle} description={content.seoDescription} path={content.path} />
       <PageHero eyebrow={content.eyebrow} title={content.title} intro={content.intro} crumbs={crumbs}>
         <div className="flex flex-wrap items-center gap-3">
-          <Button to="/afspraak" variant="mark">Maak een afspraak</Button>
+          <Button to="/afspraak-maken" variant="mark">Maak een afspraak</Button>
           <Button href={company.phone.href} variant="onInk">
             <Phone className="h-4 w-4" /> {company.phone.display}
           </Button>
@@ -134,7 +134,7 @@ export function LandingPage() {
                 Maak een afspraak of bel voor advies en een vrijblijvende prijsopgave.
               </p>
               <div className="mt-4 grid gap-2">
-                <Button to="/afspraak" variant="mark" className="w-full">Afspraak maken</Button>
+                <Button to="/afspraak-maken" variant="mark" className="w-full">Afspraak maken</Button>
                 <Button href={company.phone.href} variant="outline" className="w-full">
                   <Phone className="h-4 w-4" /> Bel ons
                 </Button>

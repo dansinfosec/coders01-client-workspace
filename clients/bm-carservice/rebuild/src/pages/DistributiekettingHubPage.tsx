@@ -24,7 +24,7 @@ export function DistributiekettingHubPage() {
         crumbs={[{ label: "Home", to: "/" }, { label: "Distributieketting" }]}
       >
         <div className="flex flex-wrap items-center gap-3">
-          <Button to="/afspraak" variant="mark">Gratis check aanvragen</Button>
+          <Button to="/afspraak-maken" variant="mark">Gratis check aanvragen</Button>
           <Button href={company.phone.href} variant="onInk">{company.phone.display}</Button>
         </div>
       </PageHero>

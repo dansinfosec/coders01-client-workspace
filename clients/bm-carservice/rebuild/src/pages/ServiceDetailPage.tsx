@@ -34,7 +34,7 @@ export function ServiceDetailPage() {
         crumbs={[{ label: "Home", to: "/" }, { label: "Diensten", to: "/diensten" }, { label: service.title }]}
       >
         <div className="flex flex-wrap items-center gap-3">
-          <Button to="/afspraak" variant="mark">Maak een afspraak</Button>
+          <Button to="/afspraak-maken" variant="mark">Maak een afspraak</Button>
           <Button href={company.phone.href} variant="onInk">
             <Phone className="h-4 w-4" /> {company.phone.display}
           </Button>
@@ -86,7 +86,7 @@ export function ServiceDetailPage() {
                 Maak online een afspraak of bel ons. Voor een APK kunt u ook zonder afspraak langskomen.
               </p>
               <div className="mt-4 grid gap-2">
-                <Button to="/afspraak" variant="mark" className="w-full">Afspraak maken</Button>
+                <Button to="/afspraak-maken" variant="mark" className="w-full">Afspraak maken</Button>
                 <Button href={company.phone.href} variant="outline" className="w-full">
                   <Phone className="h-4 w-4" /> Bel ons
                 </Button>

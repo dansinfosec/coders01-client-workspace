@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
-import { getOpenStatus, type OpenStatus } from "@/lib/openingHours";
+import { getOpenStatus, type OpenStatus, type OpeningHours } from "@/lib/openingHours";
 
 /**
  * Live "geopend / gesloten" status pill — leads with BM's walk-in advantage.
- * Computes on mount (client-side clock) and refreshes each minute.
+ * Computes on mount (client-side clock) and refreshes each minute. Pass `hours` for a
+ * specific branch; defaults to the HQ / company hours.
  */
-export function StatusPill({ className, onInk = false }: { className?: string; onInk?: boolean }) {
+export function StatusPill({
+  className,
+  onInk = false,
+  hours,
+}: {
+  className?: string;
+  onInk?: boolean;
+  hours?: OpeningHours;
+}) {
   const [status, setStatus] = useState<OpenStatus | null>(null);
 
   useEffect(() => {
-    const update = () => setStatus(getOpenStatus());
+    const update = () => setStatus(getOpenStatus(hours));
     update();
     const id = window.setInterval(update, 60_000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [hours]);
 
   // Render nothing until mounted to avoid a server/client flash (SPA: first paint).
   if (!status) return null;

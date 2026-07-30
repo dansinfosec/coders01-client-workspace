@@ -1,5 +1,7 @@
 import { company, type OpeningDay } from "@/data/company";
 
+export type OpeningHours = OpeningDay[];
+
 const fmt = (mins: number): string => {
   const hh = Math.floor(mins / 60);
   const mm = mins % 60;
@@ -14,22 +16,23 @@ export function formatRanges(day: OpeningDay): string {
 
 export interface OpenStatus {
   isOpen: boolean;
-  /** Short human label, e.g. "Nu geopend · tot 17:30" or "Gesloten · opent ma 08:30". */
   label: string;
 }
 
-const byWeekday = (weekday: number): OpeningDay =>
-  company.openingHours.find((d) => d.weekday === weekday) ??
-  company.openingHours[0]!;
+const byWeekday = (hours: OpeningHours, weekday: number): OpeningDay =>
+  hours.find((d) => d.weekday === weekday) ?? hours[0]!;
 
 /**
- * Live open/closed status for a given moment (defaults to now).
- * Pure function of the passed date so it is easy to test.
+ * Live open/closed status for a given set of opening hours (defaults to the HQ / company hours).
+ * Pure function of the passed date so it is easy to test and works per location.
  */
-export function getOpenStatus(now: Date = new Date()): OpenStatus {
+export function getOpenStatus(
+  hours: OpeningHours = company.openingHours,
+  now: Date = new Date(),
+): OpenStatus {
   const weekday = now.getDay();
   const minutes = now.getHours() * 60 + now.getMinutes();
-  const today = byWeekday(weekday);
+  const today = byWeekday(hours, weekday);
 
   for (const [open, close] of today.ranges) {
     if (minutes >= open && minutes < close) {
@@ -40,9 +43,8 @@ export function getOpenStatus(now: Date = new Date()): OpenStatus {
     }
   }
 
-  // Closed for the rest of today — find the next day with hours.
   for (let i = 1; i <= 7; i++) {
-    const next = byWeekday((weekday + i) % 7);
+    const next = byWeekday(hours, (weekday + i) % 7);
     if (next.ranges.length > 0) {
       const firstOpen = next.ranges[0]![0];
       const dayLabel = i === 1 ? "morgen" : next.day.slice(0, 2).toLowerCase();
@@ -51,4 +53,14 @@ export function getOpenStatus(now: Date = new Date()): OpenStatus {
   }
 
   return { isOpen: false, label: "Gesloten" };
+}
+
+/** Compact week span, e.g. "Ma–vr · 08:30–17:30". Falls back gracefully for varied hours. */
+export function weekSummary(hours: OpeningHours): string {
+  const open = hours.filter((d) => d.ranges.length > 0 && d.weekday >= 1 && d.weekday <= 5);
+  if (open.length === 0) return "Openingstijden op aanvraag";
+  const firstOpen = Math.min(...open.flatMap((d) => d.ranges.map((r) => r[0])));
+  const lastClose = Math.max(...open.flatMap((d) => d.ranges.map((r) => r[1])));
+  const hasSat = hours.find((d) => d.weekday === 6 && d.ranges.length > 0);
+  return `Ma–vr ${fmt(firstOpen)}–${fmt(lastClose)}${hasSat ? " · za open" : ""}`;
 }
