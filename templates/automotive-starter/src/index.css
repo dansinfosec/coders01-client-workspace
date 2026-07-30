@@ -1,0 +1,185 @@
+/* Self-hosted variable fonts (no external CDN → betere CWV + privacy). */
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Design tokens — placeholder-thema "Graphite & Petrol".
+   HSL-kanalen (H S% L%) zodat Tailwind's <alpha-value> werkt.
+   Deze waarden zijn de no-JS fallback; config/brand.ts (applyBrand) overschrijft
+   ze bij het laden. Pas kleuren bij voorkeur alleen in brand.ts aan.
+--------------------------------------------------------------------------- */
+:root {
+  /* Fonts + radius (fallbacks; brand.ts overschrijft). */
+  --font-display: "Bricolage Grotesque Variable", system-ui, "Segoe UI", Arial, sans-serif;
+  --font-body: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --brand-radius: 0.375rem;
+
+  --asphalt: 222 14% 10%;
+  --asphalt-900: 222 17% 8%;
+  --asphalt-800: 222 13% 13%;
+  --asphalt-700: 220 12% 18%;
+  --asphalt-600: 220 11% 25%;
+
+  --steel: 214 10% 40%;
+  --steel-soft: 214 12% 62%;
+
+  --paper: 40 24% 95%;
+
+  --petrol: 178 80% 24%;
+  --petrol-strong: 178 84% 17%;
+  --petrol-soft: 178 40% 90%;
+
+  --torque: 22 89% 53%;
+  --torque-strong: 20 90% 46%;
+
+  /* Kenteken-plaat — alléén binnen .kenteken / KentekenPlate. */
+  --plate-yellow: 51 93% 53%;
+  --plate-blue: 231 65% 30%;
+  --plate-ink: 222 20% 8%;
+
+  --surface: 40 20% 98%;
+  --surface-muted: 40 16% 93%;
+
+  --line: 220 14% 87%;
+  --line-strong: 220 12% 78%;
+  --line-invert: 220 10% 26%;
+
+  --text-strong: 222 18% 13%;
+  --text-body: 220 12% 27%;
+  --text-muted: 214 10% 44%;
+  --text-invert: 40 24% 96%;
+
+  --focus: 178 70% 38%;
+  --error: 0 66% 46%;
+  --success: 152 55% 36%;
+
+  --status-available: 152 55% 36%;
+  --status-reserved: 38 78% 42%;
+  --status-sold: 0 52% 42%;
+  --status-new: 22 89% 53%;
+  --status-soon: 214 14% 46%;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: hsl(var(--line));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper font-sans text-text-body antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-text-strong;
+    text-wrap: balance;
+  }
+
+  /* Zichtbare, consistente toetsenbord-focus overal. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--focus));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: hsl(var(--petrol) / 0.18);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Components — herbruikbare, tokengedreven bouwstenen
+--------------------------------------------------------------------------- */
+@layer components {
+  /* Skip-link (a11y). */
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-asphalt px-4 py-2 text-sm font-semibold text-text-invert shadow-lift;
+  }
+
+  /* Eyebrow-label (mono, technische readout). */
+  .eyebrow {
+    @apply font-mono text-2xs uppercase tracking-label text-petrol;
+  }
+
+  /* Signature: Nederlandse kenteken-plaat. Gebruikt door de RDW-invoer én occasion-kaarten. */
+  .kenteken {
+    @apply inline-flex select-none items-stretch overflow-hidden rounded-[0.3rem] font-mono font-bold uppercase leading-none;
+    background: hsl(var(--plate-yellow));
+    color: hsl(var(--plate-ink));
+    box-shadow: var(--tw-shadow, 0 0 0 2px hsl(var(--plate-ink) / 0.85));
+    letter-spacing: 0.08em;
+  }
+  .kenteken__band {
+    @apply flex flex-col items-center justify-center px-1 text-[0.5rem] font-bold leading-none text-white;
+    background: hsl(var(--plate-blue));
+  }
+  .kenteken__band::before {
+    content: "★";
+    font-size: 0.5rem;
+    line-height: 1;
+    opacity: 0.9;
+  }
+  .kenteken__band::after {
+    content: "NL";
+    font-size: 0.5rem;
+    line-height: 1.1;
+  }
+  .kenteken__value {
+    @apply flex items-center px-2 py-1;
+  }
+
+  /* Faint technische rasterachtergrond — spaarzaam op donkere secties. */
+  .blueprint {
+    background-image:
+      linear-gradient(hsl(var(--line-invert) / 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--line-invert) / 0.35) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+}
+
+/* Utility: verberg scrollbar waar dat de UX dient (bv. thumbnailrail). */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
