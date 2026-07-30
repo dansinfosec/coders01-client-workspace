@@ -108,36 +108,48 @@ export function MobileNav() {
         <Menu className="h-6 w-6" aria-hidden />
       </button>
 
-      {/* Overlay */}
+      {/* Off-canvas laag: viewport-groot clip-vlak. De drawer is hierbinnen `absolute`, zodat de
+          dichtgeschoven (translate-x-full) drawer door DIT element wordt afgekapt en NIET de
+          documentbreedte vergroot — de echte, element-eigen fix (los van de globale overflow-clip). */}
       <div
         className={cn(
-          "fixed inset-0 z-[60] bg-asphalt-900/60 backdrop-blur-sm transition-opacity duration-200",
-          open ? "opacity-100" : "pointer-events-none opacity-0",
+          "fixed inset-0 z-[60] overflow-hidden",
+          open ? "pointer-events-auto" : "pointer-events-none",
         )}
-        onClick={close}
-        aria-hidden
-      />
-
-      {/* Drawer */}
-      <div
-        id="mobile-drawer"
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigatiemenu"
-        className={cn(
-          "fixed right-0 top-0 z-[70] flex h-[100dvh] w-[min(90vw,420px)] flex-col bg-paper shadow-lift transition-transform duration-300 ease-out-expo",
-          open ? "translate-x-0" : "translate-x-full",
-        )}
+        aria-hidden={!open}
       >
-        <div className="flex items-center justify-between border-b border-line px-4 py-3">
-          <Logo />
+        {/* Overlay */}
+        <div
+          className={cn(
+            "absolute inset-0 bg-asphalt-900/60 backdrop-blur-sm transition-opacity duration-200",
+            open ? "opacity-100" : "opacity-0",
+          )}
+          onClick={close}
+          aria-hidden
+        />
+
+        {/* Drawer */}
+        <div
+          id="mobile-drawer"
+          ref={panelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigatiemenu"
+          className={cn(
+            "absolute right-0 top-0 box-border flex h-full w-[min(90vw,420px)] max-w-full flex-col overflow-x-hidden bg-paper shadow-lift transition-transform duration-300 ease-out-expo",
+            open ? "translate-x-0" : "translate-x-full",
+          )}
+        >
+        <div className="flex min-w-0 items-center justify-between gap-3 border-b border-line px-4 py-3">
+          <span className="min-w-0 truncate">
+            <Logo />
+          </span>
           <button
             ref={closeRef}
             type="button"
             aria-label="Menu sluiten"
             onClick={close}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-text-strong hover:bg-surface-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-text-strong hover:bg-surface-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
           >
             <X className="h-6 w-6" aria-hidden />
           </button>
@@ -229,6 +241,7 @@ export function MobileNav() {
               </a>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

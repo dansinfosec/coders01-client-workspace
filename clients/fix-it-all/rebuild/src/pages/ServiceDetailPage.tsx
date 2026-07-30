@@ -7,6 +7,7 @@ import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { getService } from "@/data/services";
+import { getServiceImage, serviceImageAlt } from "@/config/assets";
 import { company } from "@/data/company";
 import { paths } from "@/routes/paths";
 import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/structuredData";
@@ -41,6 +42,8 @@ export function ServiceDetailPage() {
         eyebrow="Dienst"
         title={service.title}
         intro={service.summary}
+        image={getServiceImage(service.slug)}
+        imageAlt={serviceImageAlt(service.shortLabel)}
         crumbs={[{ label: "Home", to: "/" }, { label: "Diensten", to: paths.diensten }, { label: service.shortLabel }]}
       >
         <div className="flex flex-wrap gap-3">
