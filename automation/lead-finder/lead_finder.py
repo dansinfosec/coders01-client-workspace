@@ -37,6 +37,7 @@ from leadfinder.places_client import (  # noqa: E402
 from leadfinder import website_discovery as wd  # noqa: E402
 from leadfinder import canonical  # noqa: E402
 from leadfinder import search_provider as searchprov  # noqa: E402
+from leadfinder import website_audit_pilot as wap  # noqa: E402
 
 LOGGER = None
 
@@ -205,6 +206,9 @@ def cmd_search(args):
 
 
 def cmd_audit(args):
+    if getattr(args, "from_audit_scope", None):
+        return _cmd_audit_pilot(args)
+
     paths = config.make_industry_paths(args.industry, args.output_dir)
     paths.ensure()
     leads = storage.load_leads(paths) if not args.input else \
@@ -252,6 +256,208 @@ def cmd_audit(args):
     print(f"\nAudited {len(audits)} sites ({args.industry}) → {paths.audits_json}")
     print(f"Refreshed CSV → {paths.leads_csv}")
     print(f"Master dashboard → {config.make_paths(args.output_dir).dashboard_html}")
+    return 0
+
+
+def _cmd_audit_pilot(args):
+    """Isolated, direct-HTTP-only audit pilot (or, with --exclude-audit-run,
+    the full remaining PRODUCTION scope) sampled/derived from the prepared
+    website-audit-scope.json. Makes ZERO Brave/Places calls. Never touches
+    leads.json, any discovery/canonical source file, or the legacy
+    website-audits.json — fully separate --run-tag'd outputs. Reserved,
+    immutable tags (wap.RESERVED_IMMUTABLE_TAGS) are refused outright — this
+    is a normal creation command, not the supported re-evaluation path."""
+    if not args.run_tag:
+        LOGGER.error("--from-audit-scope requires --run-tag to keep the pilot isolated.")
+        return 2
+    if args.run_tag in wap.RESERVED_IMMUTABLE_TAGS:
+        LOGGER.error("'%s' is a reserved, immutable audit run tag and cannot be "
+                     "created or written to by this command. Use a new --run-tag "
+                     "(e.g. audit-production1).", args.run_tag)
+        return 2
+    if not _mock_guard(args):
+        return 2
+    paths = config.make_industry_paths(args.industry, args.output_dir, run_tag=args.run_tag)
+    paths.ensure()
+
+    untagged_paths = config.make_industry_paths(args.industry, args.output_dir)
+    scope_doc = storage.read_json(untagged_paths.audit_scope_json, default=None)
+    if not scope_doc:
+        LOGGER.error("No website-audit-scope.json found. Run `canonicalize-discovery` first.")
+        return 2
+    leads = storage.load_leads(untagged_paths)
+    leads_by_id = {l.get("place_id"): l for l in leads}
+
+    if args.exclude_audit_run:
+        exclude_paths = config.make_industry_paths(args.industry, args.output_dir,
+                                                    run_tag=args.exclude_audit_run)
+        excluded_results = wap.load_pilot_results(exclude_paths)
+        if not excluded_results:
+            LOGGER.error("No stored results found for --exclude-audit-run '%s'. "
+                         "Refusing to guess the exclusion set.", args.exclude_audit_run)
+            return 2
+        sample = wap.build_production_scope(scope_doc["scope"], set(excluded_results))
+        storage.write_json_atomic(paths.audit_scope_tagged_json, {
+            "generated_at": scope_doc.get("generated_at"),
+            "source_scope": "website-audit-scope.json",
+            "excluded_audit_run": args.exclude_audit_run,
+            "excluded_place_id_count": len(excluded_results),
+            "audit_ready_count": scope_doc.get("audit_ready_count"),
+            "production_scope_count": len(sample),
+            "scope": sample,
+        })
+        print(f"Production scope '{args.run_tag}': {len(sample)} lead(s) "
+              f"({scope_doc.get('audit_ready_count')} audit-ready minus "
+              f"{len(excluded_results)} already covered by '{args.exclude_audit_run}') "
+              f"-> {paths.audit_scope_tagged_json}")
+    else:
+        sample = wap.select_pilot_sample(scope_doc["scope"], leads_by_id,
+                                         n_google=args.sample_google, n_discovered=args.sample_discovered)
+        n_g = sum(1 for e in sample if e["website_source"] == wap.GOOGLE_SUPPLIED)
+        n_d = sum(1 for e in sample if e["website_source"] == wap.CONFIRMED_DISCOVERED)
+        print(f"Audit pilot '{args.run_tag}': {len(sample)} lead(s) selected from "
+              f"{scope_doc.get('audit_ready_count')} audit-ready ({n_g} google_supplied / {n_d} confirmed_discovered)")
+        for i, e in enumerate(sample, 1):
+            lead = leads_by_id[e["place_id"]]
+            print(f"  {i:2}. {lead.get('business_name')}  [{lead.get('city')}]  "
+                  f"({e['website_source']})  {e['place_id']}  {e['website']}")
+
+    if args.dry_run:
+        print("\nDRY RUN — no fetches performed.")
+        return 0
+
+    fetcher = MockFetcher() if args.mock else RealFetcher(timeout=args.timeout)
+    try:
+        report = wap.run_pilot(paths, sample, leads_by_id, fetcher,
+                               max_concurrency=args.max_concurrency, resume=not args.no_resume)
+    except (wap.RunTagImmutableError, wap.ScopeFingerprintMismatchError) as exc:
+        LOGGER.error("Refusing to run: %s", exc)
+        return 2
+
+    print(f"\n=== Audit pilot report ({args.run_tag}) ===")
+    print(f"  processed this run : {report['processed_this_run']}")
+    print(f"  total in pilot     : {report['count']}")
+    print(f"  classification     : {report['classification_counts']}")
+    print(f"  outputs:")
+    print(f"    {paths.audit_pilot_results_json}")
+    print(f"    {paths.audit_pilot_progress_json}")
+    print(f"    {paths.audit_pilot_report_json}")
+    print(f"    {paths.audit_pilot_csv}")
+    return 0
+
+
+def cmd_reevaluate_audit_pilot(args):
+    """Offline re-evaluation of an EXISTING audit pilot under the corrected
+    final-HTTP-status model + audit-time wrong-industry protection. Writes to
+    SEPARATE --reeval-tag'd files; never overwrites the original pilot. A
+    targeted direct-HTTP refetch (no Brave/Places, <=4 pages, <=3 concurrency)
+    runs ONLY for leads whose stored evidence is insufficient — never all 50."""
+    if not _mock_guard(args):
+        return 2
+    reeval_tag = args.reeval_tag or f"{args.run_tag}-reeval"
+    source_paths = config.make_industry_paths(args.industry, args.output_dir, run_tag=args.run_tag)
+    if not Path(source_paths.audit_pilot_results_json).exists():
+        LOGGER.error("No existing pilot at run-tag '%s'. Run `audit --from-audit-scope` first.", args.run_tag)
+        return 2
+    dest_paths = config.make_industry_paths(args.industry, args.output_dir, run_tag=reeval_tag)
+    dest_paths.ensure()
+    leads = storage.load_leads(config.make_industry_paths(args.industry, args.output_dir))
+    leads_by_id = {l.get("place_id"): l for l in leads}
+
+    stored = wap.load_pilot_results(source_paths)
+    print(f"Re-evaluating {len(stored)} stored '{args.run_tag}' leads offline "
+          f"(source preserved, writing to '{reeval_tag}')...")
+
+    if args.dry_run:
+        preview = {}
+        needs = []
+        for pid, rec in stored.items():
+            lead = leads_by_id.get(pid, {})
+            new_rec, ambiguous = wap.reevaluate_stored_record_offline(rec, lead)
+            preview[pid] = new_rec
+            if ambiguous:
+                needs.append(pid)
+        print(f"  offline-resolved : {len(stored) - len(needs)}")
+        print(f"  needs targeted refetch : {len(needs)}")
+        for pid in needs:
+            print(f"    - {stored[pid].get('business_name')}  [{pid}]")
+        print("\nDRY RUN — no refetch performed, no files written.")
+        return 0
+
+    fetcher = None
+    if not args.offline_only:
+        fetcher = MockFetcher() if args.mock else RealFetcher(timeout=args.timeout)
+    try:
+        report = wap.reevaluate_pilot(source_paths, dest_paths, leads_by_id, fetcher,
+                                      max_concurrency=args.max_concurrency)
+    except (wap.RunTagImmutableError, wap.ScopeFingerprintMismatchError) as exc:
+        LOGGER.error("Refusing to re-evaluate: %s", exc)
+        return 2
+
+    print(f"\n=== Re-evaluation report ({reeval_tag}) ===")
+    print(f"  re-evaluated offline : {report['reevaluated_offline_count']}")
+    print(f"  targeted refetched   : {report['targeted_refetch_count']}")
+    if report["targeted_refetch_place_ids"]:
+        print(f"  refetched place_ids  : {report['targeted_refetch_place_ids']}")
+    if report["still_needs_refetch"]:
+        print(f"  still ambiguous (no fetcher given): {report['still_needs_refetch']}")
+    print(f"  classification       : {report['classification_counts']}")
+    print(f"  score-eligible       : {report['score_eligible_count']} / unscored: {report['unscored_website_count']}")
+    print(f"  avg garage score     : {report['average_garage_feature_score']}")
+    print(f"  avg quality score    : {report['average_website_quality_score']}")
+    print(f"  outputs:")
+    print(f"    {dest_paths.audit_pilot_results_json}")
+    print(f"    {dest_paths.audit_pilot_report_json}")
+    print(f"    {dest_paths.audit_pilot_csv}")
+    print(f"  (original preserved) : {source_paths.audit_pilot_results_json}")
+    return 0
+
+
+def cmd_audit_summary(args):
+    """Read-only combined latest-audit summary: audit-pilot1-reeval for the
+    original 50 + a production run-tag for the remaining scope, precedence-
+    merged into exactly one record per place_id. Makes NO fetches and touches
+    no source file — pure aggregation over whatever is already on disk."""
+    industry_paths = config.make_industry_paths(args.industry, args.output_dir)
+    scope_doc = storage.read_json(industry_paths.audit_scope_json, default=None)
+    audit_ready_count = scope_doc.get("audit_ready_count", 0) if scope_doc else 0
+
+    pilot_original_paths = config.make_industry_paths(args.industry, args.output_dir,
+                                                       run_tag="audit-pilot1")
+    pilot_reeval_paths = config.make_industry_paths(args.industry, args.output_dir,
+                                                     run_tag=args.pilot_tag)
+    production_paths = config.make_industry_paths(args.industry, args.output_dir,
+                                                   run_tag=args.production_tag)
+
+    pilot_original = wap.load_pilot_results(pilot_original_paths)
+    pilot_reeval = wap.load_pilot_results(pilot_reeval_paths)
+    production = wap.load_pilot_results(production_paths)
+
+    latest = wap.combine_latest_audit_records(pilot_original, pilot_reeval, production)
+    summary = wap.build_combined_audit_summary(audit_ready_count, latest)
+
+    print(f"=== Combined audit summary ===")
+    print(f"  sources: pilot-original={len(pilot_original)} "
+          f"pilot-reeval({args.pilot_tag})={len(pilot_reeval)} "
+          f"production({args.production_tag})={len(production)}")
+    print(f"  audit-ready total  : {summary['audit_ready_total']}")
+    print(f"  audited            : {summary['audited_count']}")
+    print(f"  remaining          : {summary['remaining_count']}")
+    print(f"  outcome counts     : success={summary['successful_usable_websites']} "
+          f"page_not_found={summary['page_not_found']} access_blocked={summary['access_blocked']} "
+          f"client_error={summary['other_client_error']} server_error={summary['server_error']} "
+          f"dns={summary['dns_failures']} tls={summary['tls_failures']} "
+          f"timeout={summary['timeouts']} connection={summary['connection_failures']}")
+    print(f"  industry relevance  : automotive_confirmed={summary['automotive_confirmed']} "
+          f"probably_automotive={summary['probably_automotive']} "
+          f"suspected_wrong_industry={summary['suspected_wrong_industry']} "
+          f"insufficient_evidence={summary['insufficient_industry_evidence']}")
+    print(f"  score-eligible      : {summary['score_eligible_count']} / unscored: {summary['unscored_website_count']}")
+    print(f"  manual-review count : {summary['manual_review_count']}")
+    print(f"  excluded-from-outreach: {summary['excluded_from_automatic_garage_outreach_count']}")
+    print(f"  avg garage score    : {summary['average_garage_feature_score']}")
+    print(f"  avg quality score   : {summary['average_website_quality_score']}")
+    print(f"  quality components  : {summary['quality_score_component_distribution']}")
     return 0
 
 
@@ -1043,7 +1249,65 @@ def build_parser() -> argparse.ArgumentParser:
     a.add_argument("--garage-features", action="store_true",
                    help="Force appointment-booking/kenteken-RDW detection "
                         "(auto-enabled for --industry autogarage).")
+    a.add_argument("--from-audit-scope", action="store_true",
+                   help="Run an ISOLATED pilot sampled from the prepared "
+                        "website-audit-scope.json instead of auditing the full "
+                        "leads.json. Direct HTTP fetch only — no Brave, no Places. "
+                        "Requires --run-tag.")
+    a.add_argument("--run-tag", default=None,
+                   help="Isolate this audit's result/progress/report/CSV files "
+                        "under a suffix (e.g. audit-production1). Required with "
+                        "--from-audit-scope; never overwrites website-audits.json. "
+                        "Reserved tags (audit-pilot1, audit-pilot1-reeval) are refused.")
+    a.add_argument("--exclude-audit-run", default=None,
+                   help="Build the full REMAINING production scope by excluding every "
+                        "place_id already covered by this run-tag's stored results "
+                        "(e.g. audit-pilot1) — authoritative exclusion by place_id, "
+                        "never by position/name. Persists a tagged scope file "
+                        "(website-audit-scope-<run-tag>.json) and processes ALL of it "
+                        "(no --sample-google/--sample-discovered subsampling).")
+    a.add_argument("--sample-google", type=int, default=40,
+                   help="Google-supplied websites to sample (--from-audit-scope only).")
+    a.add_argument("--sample-discovered", type=int, default=10,
+                   help="Confirmed-discovered websites to sample (--from-audit-scope only).")
+    a.add_argument("--max-concurrency", type=int, default=wap.MAX_CONCURRENCY,
+                   help="Max concurrent site fetches (--from-audit-scope only; hard cap 3).")
+    a.add_argument("--no-resume", action="store_true",
+                   help="Ignore existing pilot progress and reprocess from scratch "
+                        "(--from-audit-scope only).")
+    a.add_argument("--dry-run", action="store_true",
+                   help="Print the selected sample; fetch nothing (--from-audit-scope only).")
     a.set_defaults(func=cmd_audit)
+
+    rp = sub.add_parser("reevaluate-audit-pilot",
+                        help="Offline re-evaluation of an EXISTING audit pilot "
+                             "under corrected rules; targeted refetch only for "
+                             "leads with insufficient stored evidence. Writes "
+                             "SEPARATE --reeval-tag'd files.")
+    rp.add_argument("--industry", default="autogarage", help="Industry slug (default: autogarage).")
+    rp.add_argument("--run-tag", required=True, help="The EXISTING pilot's run-tag to re-evaluate.")
+    rp.add_argument("--reeval-tag", default=None,
+                    help="Output run-tag (default: '<run-tag>-reeval').")
+    rp.add_argument("--timeout", type=float, default=10.0)
+    rp.add_argument("--max-concurrency", type=int, default=wap.MAX_CONCURRENCY)
+    rp.add_argument("--offline-only", action="store_true",
+                    help="Never refetch, even for ambiguous leads (report them as still-ambiguous).")
+    rp.add_argument("--dry-run", action="store_true",
+                    help="Print what would be resolved offline vs refetched; do nothing.")
+    rp.set_defaults(func=cmd_reevaluate_audit_pilot)
+
+    asum = sub.add_parser("audit-summary",
+                          help="Read-only combined latest-audit summary across "
+                               "audit-pilot1-reeval + a production run-tag. "
+                               "No fetches, no writes to any source file.")
+    asum.add_argument("--industry", default="autogarage", help="Industry slug (default: autogarage).")
+    asum.add_argument("--pilot-tag", default="audit-pilot1-reeval",
+                      help="Run-tag holding the latest result for the original 50 "
+                           "(default: audit-pilot1-reeval).")
+    asum.add_argument("--production-tag", default="audit-production1",
+                      help="Run-tag holding the remaining scope's results "
+                           "(default: audit-production1; fine if it doesn't exist yet).")
+    asum.set_defaults(func=cmd_audit_summary)
 
     e = sub.add_parser("export", help="Export scored leads filtered by score.")
     e.add_argument("--min-score", type=int, default=0)

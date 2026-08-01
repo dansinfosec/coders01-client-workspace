@@ -93,7 +93,40 @@ class Paths:
 
     @property
     def audits_json(self) -> Path:
-        return self.output / "website-audits.json"
+        # Tag-aware but backward-compatible: untagged still resolves to the
+        # exact legacy "website-audits.json" the full-dataset audit has always
+        # used. A run_tag (e.g. an isolated pilot) gets its own separate file.
+        return self._wd("website-audits")
+
+    # --- Isolated website-audit pilot (direct-HTTP-only, sampled scope) -----
+    @property
+    def audit_pilot_results_json(self) -> Path:
+        return self._wd("website-audit")
+
+    @property
+    def audit_pilot_progress_json(self) -> Path:
+        return self._wd("website-audit-progress")
+
+    @property
+    def audit_pilot_report_json(self) -> Path:
+        return self._wd("website-audit-report")
+
+    @property
+    def audit_pilot_csv(self) -> Path:
+        return self._wd("website-audit", ".csv")
+
+    @property
+    def audit_pilot_fingerprint_json(self) -> Path:
+        # Scope/config fingerprint locking in exactly what a --run-tag'd audit
+        # run covers, so a later resume can be refused if scope or config drift.
+        return self._wd("website-audit-fingerprint")
+
+    @property
+    def audit_scope_tagged_json(self) -> Path:
+        # A persistent, tag-specific scope (e.g. the full remaining production
+        # scope after excluding an already-audited pilot's place_ids) —
+        # separate from the untagged, shared `audit_scope_json`.
+        return self._wd("website-audit-scope")
 
     @property
     def run_report(self) -> Path:

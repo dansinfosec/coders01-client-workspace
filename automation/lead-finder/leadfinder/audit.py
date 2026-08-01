@@ -58,6 +58,7 @@ class MockFetcher:
             "html": site["html"],
             "final_url": ("https://" if site["https"] else "http://") + (domain or ""),
             "redirects": 0,
+            "redirect_chain": [],
             "broken_links": site.get("broken_links", 0),
             "broken_images": site.get("broken_images", 0),
         }
@@ -98,6 +99,9 @@ class RealFetcher:
             "html": resp.text,
             "final_url": resp.url,
             "redirects": len(resp.history),
+            # Full hop-by-hop URL chain (submitted -> ... -> final), additive —
+            # existing callers that only read "redirects" (the count) are unaffected.
+            "redirect_chain": [r.url for r in resp.history] + [resp.url],
             # Deep link/image checking is left to a follow-up pass to stay polite;
             # counted as 0 here unless a richer crawl is enabled.
             "broken_links": 0,
