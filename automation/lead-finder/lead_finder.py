@@ -38,6 +38,7 @@ from leadfinder import website_discovery as wd  # noqa: E402
 from leadfinder import canonical  # noqa: E402
 from leadfinder import search_provider as searchprov  # noqa: E402
 from leadfinder import website_audit_pilot as wap  # noqa: E402
+from leadfinder import audit_queues as aq  # noqa: E402
 
 LOGGER = None
 
@@ -458,6 +459,26 @@ def cmd_audit_summary(args):
     print(f"  avg garage score    : {summary['average_garage_feature_score']}")
     print(f"  avg quality score   : {summary['average_website_quality_score']}")
     print(f"  quality components  : {summary['quality_score_component_distribution']}")
+    return 0
+
+
+def cmd_audit_export_queues(args):
+    """Reproducible, fully OFFLINE generation of every operational audit
+    queue CSV (leadfinder/audit_queues.py). Makes NO Brave/Places/HTTP call —
+    pure aggregation over already-stored audit results + leads.json. Writes
+    atomically; idempotent; fails loudly on any forbidden queue overlap."""
+    try:
+        report = aq.generate_all_queues(args.industry, args.output_dir)
+    except aq.QueueOverlapError as exc:
+        LOGGER.error("Refusing to write queues: %s", exc)
+        return 2
+
+    print(f"=== Audit queue export ({args.industry}) ===")
+    for name, count in report["counts"].items():
+        print(f"  {name:45s} {count}")
+    print(f"  overlap checks:")
+    for pair, ids in report["overlaps"].items():
+        print(f"    {pair}: {len(ids)} (must be 0)")
     return 0
 
 
@@ -1308,6 +1329,14 @@ def build_parser() -> argparse.ArgumentParser:
                       help="Run-tag holding the remaining scope's results "
                            "(default: audit-production1; fine if it doesn't exist yet).")
     asum.set_defaults(func=cmd_audit_summary)
+
+    aeq = sub.add_parser("audit-export-queues",
+                         help="Generate every operational audit-queue CSV "
+                              "(leadfinder/audit_queues.py) from the combined "
+                              "latest audit dataset. Fully OFFLINE — no Brave, "
+                              "no Places, no HTTP fetch. Idempotent, atomic writes.")
+    aeq.add_argument("--industry", default="autogarage", help="Industry slug (default: autogarage).")
+    aeq.set_defaults(func=cmd_audit_export_queues)
 
     e = sub.add_parser("export", help="Export scored leads filtered by score.")
     e.add_argument("--min-score", type=int, default=0)
