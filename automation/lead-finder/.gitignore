@@ -13,3 +13,6 @@ backups/
 .venv/
 __pycache__/
 *.py[cod]
+
+# Generated Graphify code graph
+graphify-out/
