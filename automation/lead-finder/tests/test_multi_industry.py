@@ -81,6 +81,45 @@ class TestRenderIncludesIndustryUI(unittest.TestCase):
         self.assertIn("dashboard-data.json", html)      # reads combined data
         self.assertIn("localStorage", html)             # review persistence preserved
 
+    def test_dashboard_has_review_columns_and_controls(self):
+        html = dashboard.render({"generated_at": "now", "industries": ["thuiszorg"], "rows": []})
+        for token in (">Website<", ">Google rating<", ">Review count<",
+                      ">Review status<", ">Notities<", ">Acties<",
+                      'id="fReviews"', 'id="fSort"', "geen reviews",
+                      "met reviews", "gem. rating"):
+            self.assertIn(token, html)
+
+    def test_row_renderer_is_dom_based(self):
+        # Rows must be built with DOM createElement (defensive), NOT innerHTML,
+        # so a bad field value can never drop later columns.
+        html = dashboard.render({"generated_at": "now", "industries": ["thuiszorg"], "rows": []})
+        self.assertIn("function makeRow(", html)
+        self.assertIn("createDocumentFragment", html)
+        self.assertNotIn("tr.innerHTML", html)   # the fragile pattern is gone
+
+
+class TestReviewFieldsInSchema(unittest.TestCase):
+    def test_map_to_lead_includes_review_fields(self):
+        lead = map_to_lead(
+            {"id": "p1", "displayName": {"text": "X"}},
+            {"id": "p1", "rating": 4.7, "userRatingCount": 128}, industry="thuiszorg")
+        self.assertEqual(lead["google_rating"], 4.7)
+        self.assertEqual(lead["google_review_count"], 128)
+
+    def test_review_fields_default_none(self):
+        lead = map_to_lead({"id": "p1", "displayName": {"text": "X"}}, None, industry="x")
+        self.assertIsNone(lead["google_rating"])
+        self.assertIsNone(lead["google_review_count"])
+        self.assertIn("google_rating", LEAD_FIELDS)
+        self.assertIn("google_review_count", LEAD_FIELDS)
+
+    def test_rows_carry_review_fields(self):
+        leads = [{"place_id": "p1", "industry": "x", "business_name": "B",
+                  "google_rating": 4.2, "google_review_count": 9}]
+        rows = dashboard._rows_from(leads, [], {})
+        self.assertEqual(rows[0]["google_rating"], 4.2)
+        self.assertEqual(rows[0]["google_review_count"], 9)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -149,6 +149,58 @@ Useful flags: `--dry-run` (print the planned request, call nothing),
 
 ---
 
+## Batch: category × location matrix
+
+`batch` runs many categories × locations in one resumable pass, reusing the same
+Places client, pagination, budget, dedup, storage and (optionally) audit. The
+category and location lists live in **`leadfinder/targets.py`** — edit them there.
+
+```powershell
+# Preview only — combinations + generated queries + USD estimate, ZERO API calls
+python lead_finder.py batch --dry-run
+python lead_finder.py batch --dry-run --exclude Dakdekker --round-robin
+python lead_finder.py batch --estimate-cost --category-limit 5
+
+# Mock (no real API) — subset selection
+python lead_finder.py --mock batch --category Kapper --category Schilder --location Utrecht --location Haarlem
+python lead_finder.py --mock batch --category-limit 3 --location-limit 5 --max-results 10
+
+# Live, USD-budgeted broad sweep — >20 combinations require --yes; resume is automatic
+python lead_finder.py batch --exclude Dakdekker --round-robin --require-phone `
+    --max-results 5 --usd-budget 230 --safety-pct 15 --budget 8000 --yes
+python lead_finder.py batch --reset-state        # clear checkpoint + USD cost state
+
+# Auditing stays opt-in (no Places cost) — run it later on new leads
+python lead_finder.py --mock batch --category Dakdekker --location Amsterdam --audit
+```
+
+- **USD cost guard (`leadfinder/pricing.py`).** Every billable request — each
+  Text Search page ($0.032, *Text Search Pro*), each Place Details ($0.025,
+  *Enterprise + Atmosphere*, because the mask carries rating/reviews), **and each
+  retry** — is *reserved and recorded before it is sent*, inside the client
+  request path. The run **stops at the operational ceiling**
+  (`--usd-budget` minus `--safety-pct`, default $230 − 15% = **$195.50**) and can
+  never cross the **absolute** ceiling ($230). Spend is persisted to
+  `output/cost-state.json` on every reservation and is **cumulative across
+  resumed runs**, so a crash or resume can never reuse the budget.
+- **Round-robin (`--round-robin`).** Spreads requests diagonally across
+  categories *and* locations so budget isn't consumed by one category or city.
+- **Phone-required (`--require-phone`).** Only businesses with a valid phone are
+  saved; Place Details fetched for phoneless businesses are counted as
+  `skipped (no valid phone)` in the report.
+- **Resumable checkpoints** (`output/batch-progress.json`, saved after every
+  combination) record per-combo: requests used, est. USD, businesses found,
+  leads kept/new/updated, skipped-no-phone, duplicates, timestamp. A re-run
+  **skips completed** combos; **failed** combos (category, location, error, retry
+  count, timestamp) are retried; a combo cut short by the ceiling stays pending.
+- **Merging:** new results merge into each category's `industries/<slug>/` folder
+  (existing leads preserved). Dedup order: place_id → domain → phone → name+city.
+- **Large-batch guard:** batches over 20 combinations require `--yes`.
+- Each category writes to its own industry folder; `Dakdekker`/`Makelaar` alias
+  to the existing `dakdekkers`/`makelaars` folders so results merge in.
+
+---
+
 ## Tests
 
 Fully mocked — no network:

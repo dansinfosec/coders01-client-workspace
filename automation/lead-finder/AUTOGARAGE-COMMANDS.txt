@@ -1,0 +1,14 @@
+A. Navigate to the correct directory
+Set-Location "C:\Users\dschu\Desktop\coders01-hk-vastgoed-clean\automation\lead-finder"
+
+B. Safe dry-run (zero API calls)
+py -3 lead_finder.py batch --preset automotive-garages-nl --round-robin --require-phone --max-results 60 --additional-cost-limit-usd 15 --dry-run
+
+C. Production run (capped at $15) - do not run until ready
+py -3 lead_finder.py batch --preset automotive-garages-nl --round-robin --require-phone --max-results 60 --additional-cost-limit-usd 15 --yes
+
+D. Read-only status
+py -3 -c "import json, os, io; L=lambda p: json.load(io.open(p, encoding='utf-8')); d=L('output/cost-state.json'); print('cumulative_usd', d.get('total_usd'), '| text', d.get('count_text'), '| details', d.get('count_details'), '| this_run_usd', d.get('last_run_spent_usd'), '| this_run_limit_usd', d.get('last_run_limit_usd')); p='output/industries/autogarage/leads.json'; print('autogarage_leads', (L(p).get('count') if os.path.exists(p) else 0)); s=L('output/batch-progress.json') if os.path.exists('output/batch-progress.json') else {'completed': {}, 'failed': {}}; import leadfinder.targets as t, leadfinder.batch as b; combos=t.preset_combinations(t.get_preset('automotive-garages-nl')); done=sum(1 for c in combos if b.is_completed(s, c)); print('preset_completed', done, '| preset_pending', len(combos)-done, '| preset_failed', len(s.get('failed', {})))"
+
+E. Resume run (identical to production; batch auto-resumes pending combinations)
+py -3 lead_finder.py batch --preset automotive-garages-nl --round-robin --require-phone --max-results 60 --additional-cost-limit-usd 15 --yes

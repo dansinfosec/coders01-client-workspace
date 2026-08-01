@@ -23,29 +23,43 @@ LOGGER = get_logger()
 TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText"
 PLACE_DETAILS_URL = "https://places.googleapis.com/v1/places/{place_id}"
 
-# Field masks — request only what we need (cost + privacy control).
+# Pagination limits (Places API New): 20 results/page, at most 3 pages.
+PAGE_SIZE = 20
+MAX_PAGES = 3
+MAX_RESULTS_PER_QUERY = PAGE_SIZE * MAX_PAGES          # 60
+
+# Text Search field mask — requests EVERY field the lead schema needs, so normal
+# lead discovery costs ONE Text Search per page and ZERO Place Details requests.
+# (Previously each result triggered its own Place Details call.)
 TEXT_SEARCH_FIELDS = ",".join([
     "places.id",
     "places.displayName",
     "places.formattedAddress",
-    "places.location",
-    "places.primaryType",
-    "places.googleMapsUri",
+    "places.addressComponents",
+    "places.nationalPhoneNumber",
+    "places.websiteUri",
+    "places.rating",
+    "places.userRatingCount",
     "places.businessStatus",
+    "places.primaryType",
+    "places.types",
     "nextPageToken",
 ])
 
+# Place Details is now a NARROW, opt-in fallback (--details-fallback) used only
+# when a result lacks a genuinely required contact field. Keep the mask minimal:
+# anything already returned by Text Search must not be re-requested.
 PLACE_DETAILS_FIELDS = ",".join([
     "id",
-    "displayName",
-    "formattedAddress",
     "nationalPhoneNumber",
     "internationalPhoneNumber",
     "websiteUri",
-    "googleMapsUri",
-    "businessStatus",
-    "primaryType",
 ])
+
+# Minimal mask for backfilling ONLY the Google review fields on already-known
+# place_ids (cheapest way to add rating/userRatingCount without re-fetching the
+# rest). No Text Search is involved.
+REVIEW_FIELDS = "id,rating,userRatingCount"
 
 
 class Transport(Protocol):
@@ -77,18 +91,25 @@ class Counters:
 # ---------------------------------------------------------------------------
 
 class MockTransport:
-    """Returns local fixtures. Records the last field masks for assertions."""
+    """Returns local fixtures. Records masks + call counts for assertions."""
 
-    def __init__(self):
+    def __init__(self, dataset: str = "default"):
+        self.dataset = dataset
         self.last_text_search_mask = None
         self.last_details_mask = None
+        self.last_body = None
+        self.text_calls = 0
+        self.details_calls = 0
 
     def text_search(self, body: dict, field_mask: str) -> dict:
         self.last_text_search_mask = field_mask
-        return mockdata.mock_textsearch(body.get("pageToken"))
+        self.last_body = body
+        self.text_calls += 1
+        return mockdata.mock_textsearch(body.get("pageToken"), dataset=self.dataset)
 
     def place_details(self, place_id: str, field_mask: str) -> dict:
         self.last_details_mask = field_mask
+        self.details_calls += 1
         return mockdata.mock_place_details(place_id)
 
 
@@ -131,9 +152,14 @@ class RealTransport:
 
 class PlacesClient:
     def __init__(self, transport: Transport, budget=None, delay: float = 0.5,
-                 max_retries: int = 3):
+                 max_retries: int = 3, cost_guard=None):
         self.transport = transport
         self.budget = budget
+        # Optional USD CostGuard (pricing.CostGuard). When set, it reserves the
+        # price of EVERY billable request (each page + each retry) immediately
+        # before the transport call, and stops the run at the operational limit.
+        self.cost_guard = cost_guard
+        self.cost_stopped = False
         self.delay = delay
         self.max_retries = max_retries
         self.counters = Counters()
@@ -152,7 +178,21 @@ class PlacesClient:
             self.counters.place_details_requests += 1
         return True
 
-    def _with_retries(self, call):
+    def _reserve_cost(self, kind: str) -> bool:
+        """USD gate: reserve one billable request BEFORE it is sent.
+
+        kind is 'text' or 'details'. Returns False (and flags cost_stopped) when
+        the charge would breach the operational USD limit — the caller must then
+        NOT send the request.
+        """
+        if self.cost_guard is None:
+            return True
+        if self.cost_guard.reserve(kind):
+            return True
+        self.cost_stopped = True
+        return False
+
+    def _with_retries(self, call, kind):
         attempt = 0
         while True:
             try:
@@ -160,6 +200,12 @@ class PlacesClient:
             except Exception as exc:  # noqa: BLE001 - retry transient errors
                 attempt += 1
                 if attempt > self.max_retries or not _is_transient(exc):
+                    raise
+                # A retry is a fresh billable HTTP request — reserve its cost
+                # (at THIS endpoint's price) before re-sending. If it no longer
+                # fits the budget, stop retrying and surface the error.
+                if self.cost_guard is not None and not self.cost_guard.reserve_retry(kind):
+                    self.cost_stopped = True
                     raise
                 self.counters.retries += 1
                 backoff = min(8.0, 0.5 * (2 ** (attempt - 1)))
@@ -169,14 +215,27 @@ class PlacesClient:
 
     @staticmethod
     def build_search_body(query: str, region=None, city=None, lat=None, lng=None,
-                          radius=None, page_token=None) -> dict:
-        """Build the Text Search request body."""
+                          radius=None, page_token=None, restriction=None,
+                          language_code="nl", region_code="NL") -> dict:
+        """Build the Text Search request body.
+
+        `restriction` is a strict `locationRestriction` rectangle
+        ({"low": {...}, "high": {...}}) — the API only supports rectangles here,
+        so a circle is used as a (soft) locationBias instead.
+        """
         text = query
         location_bits = " ".join(b for b in (city, region) if b)
         if location_bits:
             text = f"{query} in {location_bits}"
         body: dict = {"textQuery": text}
-        if lat is not None and lng is not None:
+        if language_code:
+            body["languageCode"] = language_code
+        if region_code:
+            body["regionCode"] = region_code
+        if restriction:
+            # STRICT: results outside the rectangle are not returned.
+            body["locationRestriction"] = {"rectangle": restriction}
+        elif lat is not None and lng is not None:
             bias = {"circle": {"center": {"latitude": lat, "longitude": lng}}}
             if radius is not None:
                 bias["circle"]["radius"] = float(radius)
@@ -186,44 +245,61 @@ class PlacesClient:
         return body
 
     def search_text(self, query, region=None, city=None, lat=None, lng=None,
-                    radius=None, max_results=50, resume_token=None):
-        """Yield place summaries (dicts) across paginated Text Search results."""
+                    radius=None, max_results=50, resume_token=None, restriction=None):
+        """Yield place summaries across paginated Text Search results.
+
+        Hard-capped at MAX_PAGES (3) pages / MAX_RESULTS_PER_QUERY (60) results
+        per query, matching the Places API pagination limit. Each result already
+        carries every lead field — no Place Details call is made here.
+        """
+        max_results = min(int(max_results), MAX_RESULTS_PER_QUERY)
         collected = 0
+        pages = 0
         page_token = resume_token
         first = True
-        while collected < max_results:
+        while collected < max_results and pages < MAX_PAGES:
             if not (first or page_token):
                 break
             first = False
+            # USD gate (reserve-before-send) THEN request-count budget. Each
+            # page — including nextPageToken pages — is a separate Text Search.
+            if not self._reserve_cost("text"):
+                break
             if not self._spend("text_search"):
                 break
-            body = self.build_search_body(query, region, city, lat, lng, radius, page_token)
+            body = self.build_search_body(query, region, city, lat, lng, radius,
+                                          page_token, restriction=restriction)
 
             def _call(body=body):
                 return self.transport.text_search(body, TEXT_SEARCH_FIELDS)
 
-            data = self._with_retries(_call)
+            data = self._with_retries(_call, "text")
+            pages += 1
             for place in data.get("places", []):
                 yield place
                 collected += 1
                 if collected >= max_results:
                     break
             page_token = data.get("nextPageToken")
-            if not page_token:
+            if not page_token or pages >= MAX_PAGES:
                 break
             if self.delay:
                 time.sleep(self.delay)
         # Expose the final token so callers can persist it for --resume.
         self.last_page_token = page_token
+        self.last_page_count = pages
 
-    def place_details(self, place_id: str) -> dict | None:
+    def place_details(self, place_id: str, field_mask: str = PLACE_DETAILS_FIELDS) -> dict | None:
+        # USD gate (reserve-before-send) THEN request-count budget.
+        if not self._reserve_cost("details"):
+            return None
         if not self._spend("place_details"):
             return None
 
         def _call():
-            return self.transport.place_details(place_id, PLACE_DETAILS_FIELDS)
+            return self.transport.place_details(place_id, field_mask)
 
-        data = self._with_retries(_call)
+        data = self._with_retries(_call, "details")
         if self.delay:
             time.sleep(self.delay)
         return data

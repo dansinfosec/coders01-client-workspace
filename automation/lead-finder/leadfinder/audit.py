@@ -22,6 +22,7 @@ from .normalize import normalize_domain
 from .form_detect import detect_form
 from .copyright_detect import detect_copyright
 from . import mockdata
+from . import garage_detect
 
 LOGGER = get_logger()
 
@@ -109,11 +110,21 @@ class RealFetcher:
 # ---------------------------------------------------------------------------
 
 def audit_lead(lead: dict, fetcher, current_year: int | None = None,
-               rendered_html_provider=None) -> dict:
+               rendered_html_provider=None, garage_features: bool = False) -> dict:
     """Return a structured audit dict for one lead's website.
 
     `rendered_html_provider(url) -> html` is an optional callback (e.g. backed by
     Playwright) used only as a last-resort fallback for JS-rendered forms.
+
+    `garage_features`: when True, also runs the appointment-booking and Dutch
+    kenteken/RDW vehicle-lookup detection (see `garage_detect.py`) and flattens
+    the results into this audit dict (has_basic_contact_form,
+    has_real_booking_calendar, can_enter_license_plate, ... — see
+    `garage_detect.detect_booking`/`detect_vehicle_lookup` for the full field
+    list). Detection is STATIC/RENDERED-HTML ONLY: nothing here submits a form,
+    logs in, or calls a private API. When `garage_features` is False (the
+    default, and for every non-garage industry) none of these keys are added,
+    so the schema and behaviour for existing industries is unchanged.
     """
     if current_year is None:
         current_year = datetime.now(timezone.utc).year
@@ -129,6 +140,9 @@ def audit_lead(lead: dict, fetcher, current_year: int | None = None,
 
     if not website:
         audit["reachable"] = False
+        if garage_features:
+            audit.update(garage_detect.detect_booking(""))
+            audit.update(garage_detect.detect_vehicle_lookup(""))
         return audit
 
     result = fetcher.fetch(website)
@@ -136,6 +150,9 @@ def audit_lead(lead: dict, fetcher, current_year: int | None = None,
         audit["reachable"] = False
         audit["unreachable_reason"] = result.get("reason")
         audit["server_error"] = result.get("reason") == "server_error"
+        if garage_features:
+            audit.update(garage_detect.detect_booking(""))
+            audit.update(garage_detect.detect_vehicle_lookup(""))
         return audit
 
     html = result.get("html", "")
@@ -180,6 +197,27 @@ def audit_lead(lead: dict, fetcher, current_year: int | None = None,
         "screenshot_desktop": None,
         "screenshot_mobile": None,
     })
+
+    if garage_features:
+        booking = garage_detect.detect_booking(html, page_url=final_url)
+        vehicle = garage_detect.detect_vehicle_lookup(html, page_url=final_url)
+        # Follow up to 2 same-host pages likely to hold the booking/kenteken
+        # flow (e.g. "/afspraak", "/kenteken"), one hop, same polite fetcher.
+        for link in garage_detect.find_booking_links(html, final_url):
+            try:
+                fetched = fetcher.fetch(link)
+            except Exception:  # noqa: BLE001 - never fail the audit on a bad link
+                continue
+            if not (fetched and fetched.get("ok")):
+                continue
+            sub_html = fetched.get("html", "")
+            booking = garage_detect.merge_booking(
+                booking, garage_detect.detect_booking(sub_html, page_url=link))
+            vehicle = garage_detect.merge_vehicle(
+                vehicle, garage_detect.detect_vehicle_lookup(sub_html, page_url=link))
+        audit.update(booking)
+        audit.update(vehicle)
+
     return audit
 
 

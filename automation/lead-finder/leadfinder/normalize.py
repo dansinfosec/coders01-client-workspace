@@ -1,9 +1,11 @@
 """Normalization + de-duplication helpers (pure, unit-tested).
 
-Leads are de-duplicated on three keys, in priority order:
-  1. place_id      — Google's stable identifier
-  2. normalized domain — same website => same business
-  3. normalized phone  — same number => same business
+Leads are de-duplicated on four keys, in priority order:
+  1. place_id             — Google's stable identifier
+  2. normalized domain    — same website => same business
+  3. normalized phone     — same number => same business
+  4. normalized name+location — fallback ONLY when the three above are absent
+                            (requires both a business name and a city/region).
 """
 
 from __future__ import annotations
@@ -73,6 +75,37 @@ def normalize_phone(phone: str | None, default_country: str = "31") -> str | Non
 
 
 # ---------------------------------------------------------------------------
+# Name + location key (4th, weakest dedup key)
+# ---------------------------------------------------------------------------
+
+# Legal-form / noise tokens stripped so "Zorg BV" == "Zorg".
+_NAME_NOISE = re.compile(r"\b(b\.?v\.?|v\.?o\.?f\.?|n\.?v\.?|the|de|het|een)\b", re.I)
+
+
+def normalize_name(name: str | None) -> str | None:
+    """Slugify a business name for fuzzy matching, or None."""
+    if not name:
+        return None
+    s = _NAME_NOISE.sub(" ", name.lower())
+    s = re.sub(r"[^a-z0-9]+", "", s)
+    return s or None
+
+
+def name_location_key(lead: dict) -> str | None:
+    """Return "namekey|location" ONLY when both a name and a location exist.
+
+    Location is the lead's city, falling back to region. Returns None when
+    either part is missing, so nameless/locationless leads never collapse.
+    """
+    name = normalize_name(lead.get("business_name"))
+    loc = lead.get("city") or lead.get("region")
+    loc = (loc or "").strip().lower()
+    if not name or not loc:
+        return None
+    return f"{name}|{loc}"
+
+
+# ---------------------------------------------------------------------------
 # De-duplication
 # ---------------------------------------------------------------------------
 
@@ -87,12 +120,14 @@ def dedupe_leads(leads: list[dict]) -> tuple[list[dict], int]:
     seen_place: dict[str, int] = {}
     seen_domain: dict[str, int] = {}
     seen_phone: dict[str, int] = {}
+    seen_namekey: dict[str, int] = {}
     duplicates = 0
 
     for lead in leads:
         place_id = lead.get("place_id")
         domain = normalize_domain(lead.get("website"))
         phone = normalize_phone(lead.get("phone"))
+        namekey = name_location_key(lead)
 
         idx = None
         if place_id and place_id in seen_place:
@@ -101,12 +136,14 @@ def dedupe_leads(leads: list[dict]) -> tuple[list[dict], int]:
             idx = seen_domain[domain]
         elif phone and phone in seen_phone:
             idx = seen_phone[phone]
+        elif namekey and namekey in seen_namekey:
+            idx = seen_namekey[namekey]
 
         if idx is not None:
             duplicates += 1
             _merge_missing(unique[idx], lead)
             # Register any newly-learned keys so later records still match.
-            _register(seen_place, seen_domain, seen_phone, idx, unique[idx])
+            _register(seen_place, seen_domain, seen_phone, seen_namekey, idx, unique[idx])
             continue
 
         idx = len(unique)
@@ -117,6 +154,8 @@ def dedupe_leads(leads: list[dict]) -> tuple[list[dict], int]:
             seen_domain[domain] = idx
         if phone:
             seen_phone[phone] = idx
+        if namekey:
+            seen_namekey[namekey] = idx
 
     return unique, duplicates
 
@@ -128,13 +167,16 @@ def _merge_missing(keep: dict, other: dict) -> None:
             keep[key] = value
 
 
-def _register(seen_place, seen_domain, seen_phone, idx, lead) -> None:
+def _register(seen_place, seen_domain, seen_phone, seen_namekey, idx, lead) -> None:
     place_id = lead.get("place_id")
     domain = normalize_domain(lead.get("website"))
     phone = normalize_phone(lead.get("phone"))
+    namekey = name_location_key(lead)
     if place_id:
         seen_place.setdefault(place_id, idx)
     if domain:
         seen_domain.setdefault(domain, idx)
     if phone:
         seen_phone.setdefault(phone, idx)
+    if namekey:
+        seen_namekey.setdefault(namekey, idx)

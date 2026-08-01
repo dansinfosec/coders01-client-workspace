@@ -16,6 +16,7 @@ ENV_PATH = TOOL_ROOT / ".env"
 DEFAULT_OUTPUT_DIR = TOOL_ROOT / "output"
 
 API_KEY_ENV = "GOOGLE_MAPS_API_KEY"
+BRAVE_API_KEY_ENV = "BRAVE_SEARCH_API_KEY"
 
 
 def load_env(path: Path = ENV_PATH) -> dict:
@@ -54,9 +55,33 @@ def get_api_key(required: bool = True) -> str | None:
     return key or None
 
 
+def get_brave_api_key(required: bool = True) -> str | None:
+    """Return the Brave Search API key from env or .env, or None.
+
+    Used ONLY by the website-discovery enrichment phase. Like the Places key it
+    is read only from the environment / a local .env file and is NEVER logged,
+    printed, or written to any output artifact.
+    """
+    key = os.environ.get(BRAVE_API_KEY_ENV) or load_env().get(BRAVE_API_KEY_ENV)
+    key = (key or "").strip()
+    if not key and required:
+        raise RuntimeError(
+            f"{BRAVE_API_KEY_ENV} is not set. Add it to .env or set the environment "
+            f"variable before running real website discovery. (Never hardcode or commit it.)"
+        )
+    return key or None
+
+
 @dataclass
 class Paths:
     output: Path
+    # Optional run tag isolating a website-discovery run's state/output files
+    # (e.g. "pilot2") so a second pilot never touches the first's progress,
+    # cost-state or results. None => the original, untagged filenames.
+    run_tag: str | None = None
+
+    def _wd(self, stem: str, ext: str = ".json") -> Path:
+        return self.output / (f"{stem}-{self.run_tag}{ext}" if self.run_tag else f"{stem}{ext}")
 
     @property
     def leads_json(self) -> Path:
@@ -92,6 +117,132 @@ class Paths:
         return self.output / "industries"
 
     @property
+    def batch_progress(self) -> Path:
+        # Checkpoint of completed/failed category × location combinations.
+        return self.output / "batch-progress.json"
+
+    @property
+    def cost_state(self) -> Path:
+        # Cumulative USD spend for the CostGuard (survives crashes/resumes).
+        return self.output / "cost-state.json"
+
+    # --- Website-discovery enrichment (phase 1) --------------------------
+    # A SEPARATE, self-contained set of files so this phase never reads or
+    # writes the Google Places cost-state.json / batch-progress.json above.
+    @property
+    def website_discovery_json(self) -> Path:
+        return self._wd("website-discovery")
+
+    @property
+    def website_discovery_progress(self) -> Path:
+        # Resume checkpoint keyed by place_id (independent of batch-progress).
+        return self._wd("website-discovery-progress")
+
+    @property
+    def website_discovery_cost_state(self) -> Path:
+        # USD spend for the search provider ONLY — never the Places cost-state.
+        return self._wd("website-discovery-cost-state")
+
+    @property
+    def discovered_websites_csv(self) -> Path:
+        return self._wd("discovered-websites", ".csv")
+
+    @property
+    def manual_website_review_csv(self) -> Path:
+        return self._wd("manual-website-review", ".csv")
+
+    @property
+    def website_not_found_csv(self) -> Path:
+        return self._wd("website-not-found", ".csv")
+
+    @property
+    def rejected_candidates_json(self) -> Path:
+        return self._wd("rejected-candidates")
+
+    @property
+    def website_discovery_report(self) -> Path:
+        return self._wd("website-discovery-report")
+
+    @property
+    def website_discovery_reeval(self) -> Path:
+        # Offline re-evaluation of an existing discovery run (no network).
+        return self._wd("website-discovery-reeval")
+
+    @property
+    def website_fetch_retry_report(self) -> Path:
+        # Retry of known candidate-fetch failures (no Brave, no new queries).
+        return self._wd("website-fetch-retry-report")
+
+    @property
+    def manual_review_queue_csv(self) -> Path:
+        # Human-review queue for fetch_failed leads (unresolved website status).
+        return self._wd("manual-review-queue", ".csv")
+
+    # --- Preparation-split review outputs (wrong-industry / adjacent) --------
+    @property
+    def wrong_industry_review_csv(self) -> Path:
+        return self.output / "wrong-industry-review-full1.csv"
+
+    @property
+    def wrong_industry_review_json(self) -> Path:
+        return self.output / "wrong-industry-review-full1.json"
+
+    @property
+    def adjacent_industry_review_csv(self) -> Path:
+        return self.output / "adjacent-industry-review-full1.csv"
+
+    @property
+    def adjacent_industry_review_json(self) -> Path:
+        return self.output / "adjacent-industry-review-full1.json"
+
+    # --- Canonical latest-status consolidation + operational queues ----------
+    @property
+    def discovery_canonical_json(self) -> Path:
+        return self.output / "website-discovery-canonical.json"
+
+    @property
+    def discovery_canonical_csv(self) -> Path:
+        return self.output / "website-discovery-canonical.csv"
+
+    @property
+    def discovery_canonical_summary(self) -> Path:
+        return self.output / "website-discovery-canonical-summary.json"
+
+    @property
+    def accepted_website_review_csv(self) -> Path:
+        return self.output / "accepted-website-review.csv"
+
+    @property
+    def accepted_website_review_json(self) -> Path:
+        return self.output / "accepted-website-review.json"
+
+    @property
+    def confirmed_discovered_websites_csv(self) -> Path:
+        return self.output / "confirmed-discovered-websites.csv"
+
+    @property
+    def identity_manual_review_csv(self) -> Path:
+        return self.output / "identity-manual-review.csv"
+
+    @property
+    def fetch_failed_manual_review_csv(self) -> Path:
+        return self.output / "fetch-failed-manual-review.csv"
+
+    @property
+    def no_reliable_official_website_csv(self) -> Path:
+        return self.output / "no-reliable-official-website-found.csv"
+
+    @property
+    def rejected_candidate_review_csv(self) -> Path:
+        return self.output / "rejected-candidate-review.csv"
+
+    @property
+    def audit_scope_json(self) -> Path:
+        # Prepared (not executed) website-audit scope: Google-supplied + confirmed
+        # discovered websites, deduplicated. Read-only until an audit is authorized.
+        return self.output / "website-audit-scope.json"
+
+    @property
     def screenshots_desktop(self) -> Path:
         return self.output / "screenshots" / "desktop"
 
@@ -108,10 +259,14 @@ def make_paths(output_dir: str | Path | None = None) -> Paths:
     return Paths(output=Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR)
 
 
-def make_industry_paths(industry: str, output_dir: str | Path | None = None) -> Paths:
-    """Paths rooted at output/industries/<industry>/ so industries stay separate."""
+def make_industry_paths(industry: str, output_dir: str | Path | None = None,
+                        run_tag: str | None = None) -> Paths:
+    """Paths rooted at output/industries/<industry>/ so industries stay separate.
+
+    `run_tag` isolates a website-discovery run's state/output files (e.g. a second
+    pilot) without affecting leads.json or the untagged run's files."""
     base = Path(output_dir) if output_dir else DEFAULT_OUTPUT_DIR
-    return Paths(output=base / "industries" / industry)
+    return Paths(output=base / "industries" / industry, run_tag=run_tag)
 
 
 def list_industries(output_dir: str | Path | None = None) -> list[str]:
