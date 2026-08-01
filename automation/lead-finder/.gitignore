@@ -6,6 +6,9 @@
 # Generated run artifacts.
 output/
 
+# Local-only backups (may contain personal lead data) — never tracked.
+backups/
+
 # Local venv / caches.
 .venv/
 __pycache__/
