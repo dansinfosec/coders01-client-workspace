@@ -285,6 +285,59 @@ def _dedupe_sorted(items: list[tuple]) -> list[tuple]:
     return out
 
 
+def build_all_queue_rowsets(latest: dict, leads_by_id: dict) -> dict:
+    """Pure, in-memory computation of EVERY operational queue's rows — the
+    single source of truth shared by `generate_all_queues()` (CSV writer) and
+    the audit-review dashboard (reads this directly, never parses its own
+    CSVs, so the dashboard can never go stale relative to the exported
+    files). Returns {"queues": {name: [(pid, record), ...]}, "reasons_by_id":
+    {...}, "overlaps": {...}}."""
+    sales = build_sales_queues(latest, leads_by_id)
+    priority, secondary, do_not_contact = sales["priority"], sales["secondary"], sales["do_not_contact"]
+
+    def by_outcome(outcomes):
+        return _dedupe_sorted([(pid, r) for pid, r in latest.items() if r.get("outcome") in outcomes])
+
+    def by_relevance(status):
+        return _dedupe_sorted([(pid, r) for pid, r in latest.items()
+                               if r.get("industry_relevance_status") == status])
+
+    identity_conflict = _dedupe_sorted([(pid, r) for pid, r in latest.items()
+                                        if r.get("identity_match_outcome") == "conflict"])
+    external_redirect = _dedupe_sorted([(pid, r) for pid, r in latest.items() if r.get("external_redirect")])
+    booking_opportunity = _dedupe_sorted([(pid, r) for pid, r in latest.items()
+                                          if wap.is_score_eligible(r)
+                                          and (r.get("has_real_booking_calendar")
+                                               or r.get("has_appointment_request_form"))])
+    advanced_garage = _dedupe_sorted([(pid, r) for pid, r in latest.items()
+                                      if r.get("final_audit_classification") == ADVANCED_CLASSIFICATION])
+    automatic_eligible = _dedupe_sorted(priority + secondary)
+    validation_sample = build_validation_sample(priority, leads_by_id, n=100)
+    technical_failures = _dedupe_sorted(
+        by_outcome((wap.OUTCOME_PAGE_NOT_FOUND,) + _ACCESS_BLOCKED_OUTCOMES + _TRANSPORT_OUTCOMES
+                   + (wap.OUTCOME_SERVER_ERROR, wap.OUTCOME_INTERNAL_ERROR)))
+
+    queues = {
+        "suspected-wrong-industry-review": by_relevance(wap.REL_SUSPECTED_WRONG),
+        "insufficient-industry-evidence-review": by_relevance(wap.REL_INSUFFICIENT),
+        "identity-conflict-review": identity_conflict,
+        "page-not-found-review": by_outcome((wap.OUTCOME_PAGE_NOT_FOUND,)),
+        "access-blocked-review": by_outcome(_ACCESS_BLOCKED_OUTCOMES),
+        "transport-failure-review": by_outcome(_TRANSPORT_OUTCOMES),
+        "server-error-review": by_outcome((wap.OUTCOME_SERVER_ERROR,)),
+        "external-redirect-review": external_redirect,
+        "booking-opportunity-leads": booking_opportunity,
+        "advanced-garage-websites": advanced_garage,
+        "automatic-garage-outreach-eligible": automatic_eligible,
+        "sales-ready-priority": priority,
+        "sales-ready-secondary": secondary,
+        "sales-ready-validation-sample": validation_sample,
+        "do-not-auto-contact": do_not_contact,
+        "technical-failures": technical_failures,
+    }
+    return {"queues": queues, "reasons_by_id": sales["reasons_by_id"], "overlaps": sales["overlaps"]}
+
+
 def generate_all_queues(industry: str, output_dir=None) -> dict:
     """Builds and atomically writes every operational queue CSV from the
     combined latest audit dataset. Idempotent: re-running with unchanged

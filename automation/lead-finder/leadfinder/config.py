@@ -275,6 +275,29 @@ class Paths:
         # discovered websites, deduplicated. Read-only until an audit is authorized.
         return self.output / "website-audit-scope.json"
 
+    # --- Human review of the sales-ready validation sample -------------------
+    @property
+    def human_review_decisions_json(self) -> Path:
+        # Durable, separate-from-audit-data store of human review verdicts,
+        # keyed by place_id. Never written into the immutable audit JSON files.
+        return self.output / "human-review-decisions.json"
+
+    @property
+    def human_review_completed_csv(self) -> Path:
+        # Reproducible export: original sample evidence + the decision file,
+        # combined. Never overwrites sales-ready-validation-human-review.csv.
+        return self.output / "sales-ready-validation-human-review-completed.csv"
+
+    @property
+    def first_call_batch_csv(self) -> Path:
+        return self.output / "approved-first-call-batch.csv"
+
+    @property
+    def audit_dashboard_html(self) -> Path:
+        # Per-industry "Audit & Sales Review" dashboard (distinct from the
+        # multi-industry master dashboard.html at the top-level output/ dir).
+        return self.output / "audit-review-dashboard.html"
+
     @property
     def screenshots_desktop(self) -> Path:
         return self.output / "screenshots" / "desktop"
