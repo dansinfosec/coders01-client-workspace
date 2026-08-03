@@ -1,0 +1,30 @@
+# Dependencies & build output
+node_modules/
+dist/
+.vite/
+
+# Secrets & local env — never commit
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# AI preview atmosphere images: track ONLY the optimized WebP used by the
+# frontend. Raw generator drops stay ignored. These are TEMPORARY preview
+# visuals and must be approved or replaced with owner-provided photos before
+# production.
+public/images/ai-preview/*
+!public/images/ai-preview/*.webp
+
+# Google Maps preview photos (if any are ever added): track only optimized WebP.
+public/images/google-preview/*
+!public/images/google-preview/*.webp

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Allround Schadeherstel">
+  <rect width="64" height="64" rx="12" fill="#24272B"/>
+  <!-- Abstract vehicle silhouette + orange repair accent (brand-neutral mark, not the logo). -->
+  <path d="M12 40h40M18 40c0-6 5-10 12-11 4-4 9-6 14-5l6 6c2 0 4 1 4 4v6"
+        fill="none" stroke="#F4F5F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 34c6-3 14-4 22-2" fill="none" stroke="#C8611E" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="24" cy="44" r="4" fill="#F4F5F6"/>
+  <circle cx="44" cy="44" r="4" fill="#F4F5F6"/>
+</svg>

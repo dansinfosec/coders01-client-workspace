@@ -1,0 +1,23 @@
+# Client project — Allround Schadeherstel Utrecht (preview)
+
+# Node / build output inside rebuild/
+rebuild/node_modules/
+rebuild/dist/
+rebuild/.vite/
+
+# Raw, unoptimised source drops — never tracked. Only the optimised WebP that the
+# frontend actually uses (under rebuild/public/images/**) is committed.
+assets/original/google-preview-raw/
+assets/original/higgsfield-preview-raw/
+
+# Secrets / local env
+**/.env
+**/.env.*
+!**/.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

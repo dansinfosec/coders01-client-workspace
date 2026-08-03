@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Allround Schadeherstel Utrecht — design tokens.
+
+  MEASURED from the supplied logo artwork (sampled pixels):
+    --anthracite  #242424  (logo background)
+    --orange      #C65000  (logo accent stripe)  -> hsl(24 100% 39%)
+
+  ADDED for accessibility / UI structure (NOT sampled from the logo):
+    a neutral anthracite surface ramp, warm off-white text ramp, a muted steel
+    grey, a hairline border, a brighter orange for hover, a warm focus ring, and
+    success/error states for the form.
+
+  HSL channels so Tailwind can apply opacity via hsl(var(--x) / a).
+*/
+:root {
+  --anthracite: 0 0% 14%;        /* measured #242424 */
+
+  --surface: 216 7% 11%;         /* page base */
+  --surface-muted: 216 7% 15%;   /* cards */
+  --surface-raised: 216 6% 20%;  /* raised panels */
+
+  --ink: 220 8% 10%;             /* near-black — text on orange */
+  --white: 0 0% 100%;
+
+  --text-strong: 210 16% 97%;    /* headings — warm off-white */
+  --text-body: 214 10% 80%;      /* body */
+  --text-muted: 214 8% 62%;      /* secondary */
+  --text-invert: 220 8% 10%;     /* text on light/orange surfaces */
+
+  --orange: 24 100% 39%;         /* measured #C65000 */
+  --orange-bright: 26 92% 50%;   /* hover / emphasis */
+
+  --steel: 214 11% 58%;          /* subtle steel-grey accents */
+  --line: 216 8% 22%;            /* hairline border */
+  --focus: 28 96% 60%;           /* warm focus ring */
+
+  --success: 150 48% 45%;
+  --error: 2 72% 57%;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@layer base {
+  * { border-color: hsl(var(--line)); }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-surface text-text-body font-sans antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-bold tracking-tight text-text-strong;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--focus));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .skip-link { @apply sr-only; }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-orange px-4 py-2 font-semibold text-ink shadow-soft;
+  }
+
+  /* Small uppercase section label. */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-orange;
+  }
+
+  /* Orange "repair line" hairline echoing the logo accent stripe. */
+  .accent-rule {
+    height: 3px;
+    width: 3.5rem;
+    background: linear-gradient(90deg, hsl(var(--orange)) 0%, hsl(var(--orange-bright)) 100%);
+    border-radius: 999px;
+  }
+
+  /* Faint diagonal industrial texture for hero / section backdrops. */
+  .diagonal-grid {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--white) / 0.025) 0 1px,
+      transparent 1px 14px
+    );
+  }
+}
